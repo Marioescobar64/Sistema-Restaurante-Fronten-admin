@@ -4,25 +4,26 @@
   --primary: #7F3C09;
   --secondary: #2C1506;
   --danger: #440F0F;
- 
+
   --text-main: #2C1506;
   --text-light: #F5F5DC;
- 
+
   --accent: #7F3C09;
   --accent-bg: #F5F5DC;
   --accent-border: #440F0F;
- 
+
   --border: #7F3C09;
 }
- 
-/* Reset básico */
+
+/* RESET + BASE */
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(135deg, #F3F8F2, #F5F5DC);
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  background: linear-gradient(rgba(243,248,242,0.9), rgba(245,245,220,0.9)),
+              url("/fondo.png") no-repeat center/cover;
   color: var(--text-main);
 }
- 
+
 /* CONTENEDOR LOGIN */
 .login-container {
   height: 100vh;
@@ -30,54 +31,78 @@ body {
   justify-content: center;
   align-items: center;
 }
- 
+
 /* CARD LOGIN */
 .login-card {
-  background: var(--bg-card);
-  padding: 40px;
-  border-radius: 15px;
-  width: 320px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  background: rgba(245, 245, 220, 0.95);
+  padding: 40px 30px;
+  border-radius: 18px;
+  width: 340px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(127, 60, 9, 0.2);
+  transition: transform 0.3s ease;
 }
- 
+
+.login-card:hover {
+  transform: translateY(-5px);
+}
+
+/* LOGO */
+.login-logo {
+  display: block;
+  margin: 0 auto 15px auto;
+  width: 80px;
+}
+
 /* TITULO */
 .login-card h2 {
   text-align: center;
   margin-bottom: 20px;
   color: var(--primary);
+  letter-spacing: 1px;
 }
- 
+
 /* INPUTS */
 .login-card input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 15px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  border: 1px solid rgba(127, 60, 9, 0.3);
+  border-radius: 10px;
   outline: none;
+  transition: all 0.2s ease;
+  font-size: 14px;
 }
- 
+
 .login-card input:focus {
   border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(127, 60, 9, 0.2);
 }
- 
+
 /* BOTÓN */
 .login-card button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background: var(--primary);
   color: var(--text-light);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  letter-spacing: 0.5px;
 }
- 
+
 .login-card button:hover {
   background: var(--secondary);
+  transform: scale(1.02);
 }
- 
-/* EXTRA: efecto suave */
-.login-card {
-  backdrop-filter: blur(10px);
+
+/* TEXTO EXTRA (opcional) */
+.login-footer {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.7;
 }

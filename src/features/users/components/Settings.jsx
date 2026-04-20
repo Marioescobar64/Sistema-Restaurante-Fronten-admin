@@ -1,107 +1,98 @@
-export const Settings = ({ users = [] }) => {
+export const Menu = () => {
+    const dishes = [
+        {
+            _id: "1",
+            name: "Pizza Pepperoni",
+            category: "PIZZAS",
+            price: "Q80",
+            status: "DISPONIBLE",
+        },
+        {
+            _id: "2",
+            name: "Hamburguesa Clásica",
+            category: "HAMBURGUESAS",
+            price: "Q45",
+            status: "AGOTADO",
+        },
+    ];
+
     return (
         <div className="p-4 md:p-6">
-            <h1 className="text-2xl font-bold mb-6 text-gray-800">
-                Gestión de Usuarios
-            </h1>
-
-            <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
-
-                {/* TABLE (desktop) */}
-                <div className="hidden md:block">
-                    <table className="w-full text-sm">
-                        <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
-                            <tr>
-                                <th className="text-left px-6 py-4">Usuario</th>
-                                <th className="text-left px-6 py-4">Email</th>
-                                <th className="text-left px-6 py-4">Rol</th>
-                                <th className="text-right px-6 py-4">Acción</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {users.map((user) => (
-                                <tr
-                                    key={user.id}
-                                    className="border-t hover:bg-gray-50 transition"
-                                >
-                                    {/* Usuario */}
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-3">
-                                            <img
-                                                src={user.profilePicture}
-                                                alt={user.username}
-                                                className="w-11 h-11 rounded-full object-cover ring-2 ring-gray-100"
-                                            />
-                                            <div>
-                                                <p className="font-semibold text-gray-800">
-                                                    {user.username}
-                                                </p>
-                                                <p className="text-xs text-gray-500">
-                                                    ID: {user.id}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    {/* Email */}
-                                    <td className="px-6 py-4 text-gray-600">
-                                        {user.email}
-                                    </td>
-
-                                    {/* Rol */}
-                                    <td className="px-6 py-4">
-                                        <span className="px-3 py-1 text-xs rounded-full font-semibold bg-blue-100 text-blue-700">
-                                            {user.role}
-                                        </span>
-                                    </td>
-
-                                    {/* Acción */}
-                                    <td className="px-6 py-4 text-right">
-                                        <button className="px-4 py-2 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition">
-                                            Cambiar Rol
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+            {/* HEADER */}
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
+                <div>
+                    <h1 className="text-3xl font-bold text-[#2C1506]">
+                        Gestión de Menú
+                    </h1>
+                    <p className="text-[#7F3C09]/70 text-sm">
+                        Administra los platillos del restaurante
+                    </p>
                 </div>
 
-                {/* CARDS (mobile) */}
-                <div className="md:hidden divide-y">
-                    {users.map((user) => (
-                        <div key={user.id} className="p-4 flex flex-col gap-3">
+                <button className="bg-[#7F3C09] px-4 py-2 rounded-lg text-[#F5F5DC] hover:bg-[#2C1506] transition shadow">
+                    + Agregar Platillo
+                </button>
+            </div>
 
-                            <div className="flex items-center gap-3">
-                                <img
-                                    src={user.profilePicture}
-                                    alt={user.username}
-                                    className="w-12 h-12 rounded-full object-cover"
-                                />
-                                <div>
-                                    <p className="font-semibold text-gray-800">
-                                        {user.username}
-                                    </p>
-                                    <p className="text-xs text-gray-500">
-                                        {user.email}
-                                    </p>
+            {/* GRID */}
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {dishes.map((dish) => {
+                    const isAvailable = dish.status === "DISPONIBLE";
+
+                    return (
+                        <div
+                            key={dish._id}
+                            className="bg-[#F5F5DC] rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-[#7F3C09]/20 hover:scale-[1.02]"
+                        >
+                            <div className="p-5">
+                                <h2 className="text-xl font-bold text-[#2C1506]">
+                                    {dish.name}
+                                </h2>
+
+                                {/* BADGES */}
+                                <div className="flex gap-2 mt-2 flex-wrap">
+                                    <span className="px-3 py-1 text-xs rounded-full bg-[#7F3C09]/10 text-[#7F3C09] font-medium">
+                                        {dish.category}
+                                    </span>
+
+                                    <span
+                                        className={`px-3 py-1 text-xs rounded-full font-medium ${
+                                            isAvailable
+                                                ? "bg-green-100 text-green-700"
+                                                : "bg-red-100 text-red-700"
+                                        }`}
+                                    >
+                                        {dish.status}
+                                    </span>
+                                </div>
+
+                                {/* INFO */}
+                                <p className="text-lg font-semibold text-[#7F3C09] mt-3">
+                                    {dish.price}
+                                </p>
+
+                                {/* BOTONES */}
+                                <div className="flex gap-3 mt-5">
+                                    <button className="flex-1 py-2 rounded-lg bg-[#7F3C09] text-[#F5F5DC] font-medium hover:bg-[#2C1506] transition">
+                                        ✏️ Editar
+                                    </button>
+
+                                    <button className="flex-1 py-2 rounded-lg bg-[#440F0F] text-white font-medium hover:opacity-90 transition">
+                                        🗑️ Eliminar
+                                    </button>
                                 </div>
                             </div>
-
-                            <div className="flex justify-between items-center">
-                                <span className="px-3 py-1 text-xs rounded-full font-semibold bg-blue-100 text-blue-700">
-                                    {user.role}
-                                </span>
-
-                                <button className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600">
-                                    Cambiar
-                                </button>
-                            </div>
                         </div>
-                    ))}
-                </div>
+                    );
+                })}
             </div>
+
+            {/* EMPTY */}
+            {dishes.length === 0 && (
+                <div className="text-center text-[#7F3C09]/60 mt-10">
+                    No hay platillos registrados
+                </div>
+            )}
         </div>
     );
 };

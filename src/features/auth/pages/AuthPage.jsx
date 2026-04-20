@@ -6,35 +6,44 @@ export const AuthPage = () => {
   const [isForgot, setIsForgot] = useState(false);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#C4935A]/20 p-4"
-      style={{ backgroundImage: "radial-gradient(ellipse at top, #E8D5B7 0%, #C4A882 60%, #A0724A 100%)" }}
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{
+        backgroundImage: `
+          linear-gradient(rgba(243,248,242,0.85), rgba(245,245,220,0.9)),
+          url("/fondo.png")
+        `,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
 
-      {/* Tarjeta del formulario */}
-      <div className="w-full max-w-xl bg-[#F5ECD9]/90 backdrop-blur-md rounded-xl shadow-lg border border-[#A0724A]/30 p-6 md:p-10">
+      {/* CARD */}
+      <div className="w-full max-w-md bg-[#F5ECD9]/95 backdrop-blur-md rounded-2xl shadow-2xl border border-[#A0724A]/20 p-8 md:p-10 transition-all duration-300">
 
-        {/* Logo */}
-        <div className="flex justify-center mb-6">
+        {/* LOGO */}
+        <div className="flex justify-center mb-5">
           <img
-            src="/src/assets/img/logo.png"
-            alt="Papa Luigi"
-            className="h-20 w-auto"
+            src="/logo.png"
+            alt="Logo Restaurante"
+            className="h-20 w-auto drop-shadow-md"
           />
         </div>
 
-        {/* Título y subtítulo */}
+        {/* HEADER */}
         <div className="text-center mb-6">
           <h1 className="text-2xl lg:text-3xl font-bold text-[#4A2C0A] mb-2">
-            {isForgot ? "Recuperar Contraseña" : "Bienvenido de Nuevo"}
+            {isForgot ? "Recuperar contraseña" : "Bienvenido"}
           </h1>
 
-          <p className="text-[#7A5235] text-base max-w-md mx-auto">
+          <p className="text-[#7A5235] text-sm max-w-xs mx-auto">
             {isForgot
-              ? "Ingresa tu correo para recuperar tu contraseña"
-              : "Ingresa a tu cuenta de administrador de Papa Luigi"}
+              ? "Ingresa tu correo para recuperar tu acceso"
+              : "Accede al panel administrativo del restaurante"}
           </p>
         </div>
 
+        {/* FORM */}
         {isForgot ? (
           <ForgotPasswordForm onSwitch={() => setIsForgot(false)} />
         ) : (

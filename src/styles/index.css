@@ -1,32 +1,69 @@
 @import "tailwindcss";
- 
-/* VARIABLES DE COLOR (TU PALETA) */
-@theme {
-  --color-primary: #7F3C09;
-  --color-secondary: #2C1506;
-  --color-bg: #F3F8F2;
-  --color-card: #F5F5DC;
-  --color-danger: #440F0F;
-}
- 
+
+/* =========================
+   VARIABLES GLOBALES
+========================= */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
- 
   --primary: #7F3C09;
   --secondary: #2C1506;
   --bg: #F3F8F2;
   --card: #F5F5DC;
   --danger: #440F0F;
- 
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
- 
-/* ANIMACIÓN */
+
+/* =========================
+   UTILIDADES PERSONALIZADAS
+========================= */
+
+/* Colores reutilizables */
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-secondary {
+  background-color: var(--secondary);
+}
+
+.bg-card {
+  background-color: var(--card);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-secondary {
+  color: var(--secondary);
+}
+
+.border-primary {
+  border-color: var(--primary);
+}
+
+/* Botón principal */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* =========================
+   ANIMACIONES
+========================= */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -37,33 +74,33 @@
     transform: translateY(0);
   }
 }
- 
+
 .animate-fadeIn {
   animation: fadeIn 0.15s ease-out;
 }
- 
-/* SIDEBAR EFECTO */
+
+/* =========================
+   SIDEBAR EFECTO ACTIVO
+========================= */
 .sidebar-underline {
   position: relative;
 }
- 
+
 .sidebar-underline.active::after {
   content: "";
   position: absolute;
   left: 16px;
   right: 16px;
   bottom: 6px;
-  height: 5px;
+  height: 4px;
   border-radius: 6px;
- 
-  /* 🎨 degradado con tu paleta */
+
   background: linear-gradient(
     90deg,
     rgba(127, 60, 9, 0.2) 0%,
-    #7F3C09 50%,
+    var(--primary) 50%,
     rgba(127, 60, 9, 0.2) 100%
   );
- 
+
   filter: blur(1.5px);
-  z-index: 1;
 }
