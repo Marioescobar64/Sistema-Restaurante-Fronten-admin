@@ -1,6 +1,34 @@
+import { useAuthStore } from '../store/authStore.js';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import toast from "react-hot-toast";
+
 export const LoginForm = ({ onForgot }) => {
+
+  const navigate = useNavigate();
+
+  const login = useAuthStore((state) => state.login);
+  const loading = useAuthStore((state) => state.loading);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    const res = await login(data);
+    if (res.success) {
+      navigate("/dashboard");
+      toast.success("Bienvenido de nuevo 🚀");
+    }
+  };
+
   return (
-    <form className="space-y-6 bg-[#E8D5B7]/95 backdrop-blur-md p-7 rounded-2xl border border-[#A0724A]/20 shadow-lg transition-all duration-300">
+    <form 
+      onSubmit={handleSubmit(onSubmit)} className="space-y-6
+       bg-[#E8D5B7]/95 backdrop-blur-md p-7 rounded-2xl border border-[#A0724A]/20 shadow-lg transition-all duration-300"
+    >
 
       {/* HEADER */}
       <div className="text-center">
@@ -24,7 +52,15 @@ export const LoginForm = ({ onForgot }) => {
                      focus:ring-2 focus:ring-[#A0724A]/60 focus:border-[#A0724A] 
                      outline-none bg-[#F5ECD9]/70 text-[#4A2C0A] 
                      placeholder-[#A0724A]/50 transition"
+          {...register("emailOrUsername", {
+            required: "Email o usuario es obligatorio"
+          })}
         />
+        {errors.emailOrUsername && (
+          <p className="text-red-500 text-xs mt-1">
+            {errors.emailOrUsername.message}
+          </p>
+        )}
       </div>
 
       {/* PASSWORD */}
@@ -39,17 +75,26 @@ export const LoginForm = ({ onForgot }) => {
                      focus:ring-2 focus:ring-[#A0724A]/60 focus:border-[#A0724A] 
                      outline-none bg-[#F5ECD9]/70 text-[#4A2C0A] 
                      placeholder-[#A0724A]/50 transition"
+          {...register("password", {
+            required: "Contraseña es obligatoria"
+          })}
         />
+        {errors.password && (
+          <p className="text-red-500 text-xs mt-1">
+            {errors.password.message}
+          </p>
+        )}
       </div>
 
       {/* BOTÓN */}
       <button
         type="submit"
+        disabled={loading}
         className="w-full bg-[#A0724A] text-[#F5ECD9] py-2.5 px-4 rounded-lg 
                    text-sm font-semibold hover:bg-[#7A5235] 
                    transition-all duration-300 hover:scale-[1.02] shadow-md"
       >
-        Iniciar Sesión
+        {loading ? "Iniciando..." : "Iniciar Sesión"}
       </button>
 
       {/* LINK */}
