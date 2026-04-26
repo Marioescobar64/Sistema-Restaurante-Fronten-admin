@@ -3,7 +3,7 @@ import { LoginForm } from "../../../../src/features/auth/components/LoginForm";
 import { ForgotPasswordForm } from "../components/ForgotPasswordForm";
 
 export const AuthPage = () => {
-  const [isForgot, setIsForgot] = useState(false);
+  const [isForgot, setIsForgot] = useState(true);
 
   return (
     <div
