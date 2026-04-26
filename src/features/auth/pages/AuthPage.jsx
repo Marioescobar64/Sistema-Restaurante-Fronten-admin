@@ -2,7 +2,7 @@ import { useState } from "react";
 import { LoginForm } from "../../../../src/features/auth/components/LoginForm";
 import { ForgotPasswordForm } from "../components/ForgotPasswordForm";
 
-export const AuthPage = () => {
+ const AuthPage = () => {
   const [isForgot, setIsForgot] = useState(true);
 
   return (
@@ -43,14 +43,42 @@ export const AuthPage = () => {
           </p>
         </div>
 
-        {/* FORM */}
+       {/* 🔥 AQUÍ ESTÁ EL CAMBIO */}
         {isForgot ? (
-          <ForgotPasswordForm onSwitch={() => setIsForgot(false)} />
+          <LoginForm onForgot={() => setIsForgot(false)} />
         ) : (
-          <LoginForm onForgot={() => setIsForgot(true)} />
+          <ForgotPasswordForm onSwitch={() => setIsForgot(true)} />
         )}
+
+        {/* Opciones */}
+        <div className="flex justify-between text-sm mt-4 text-white/80">
+          {isForgot ? (
+            <>
+              <label>
+                <input type="checkbox" className="mr-1" />
+                Remember me
+              </label>
+
+              <span
+                className="cursor-pointer hover:underline"
+                onClick={() => setIsForgot(false)}
+              >
+                Forgot Password?
+              </span>
+            </>
+          ) : (
+            <span
+              className="cursor-pointer hover:underline mx-auto"
+              onClick={() => setIsForgot(true)}
+            >
+              Volver al login
+            </span>
+          )}
+        </div>
 
       </div>
     </div>
   );
 };
+
+export { AuthPage };
