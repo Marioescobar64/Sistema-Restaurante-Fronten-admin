@@ -2,7 +2,7 @@ import imgLogo from "../../../assets/img/logo.png";
 
 export const Navbar = ({ user }) => {
     return (
-        <nav className="bg-[#E8D5B7]/95 backdrop-blur-md border-b border-[#A0724A]/40 sticky top-0 z-50 shadow-sm">
+        <nav className="bg-[#C00000]/95 backdrop-blur-md border-b border-[#8B0000]/40 sticky top-0 z-50 shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
 
                 {/* LOGO + NOMBRE */}
@@ -14,10 +14,10 @@ export const Navbar = ({ user }) => {
                     />
 
                     <div className="flex flex-col leading-tight">
-                        <span className="font-bold text-[#4A2C0A] text-lg">
+                        <span className="font-bold text-white text-lg">
                             Papa Luigi
                         </span>
-                        <span className="text-xs text-[#7A5235]">
+                        <span className="text-xs text-white/80">
                             Panel Administrativo
                         </span>
                     </div>
@@ -28,16 +28,16 @@ export const Navbar = ({ user }) => {
 
                     {/* Nombre usuario */}
                     <div className="hidden sm:flex flex-col text-right">
-                        <span className="text-sm font-semibold text-[#4A2C0A]">
+                        <span className="text-sm font-semibold text-white">
                             {user?.username || "Admin"}
                         </span>
-                        <span className="text-xs text-[#7A5235]">
+                        <span className="text-xs text-white/80">
                             {user?.role || "Administrador"}
                         </span>
                     </div>
 
                     {/* Avatar */}
-                    <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#A0724A]/70 bg-[#C4935A]/30">
+                    <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/70 bg-[#2E7D32]/30">
                         {user?.profilePicture ? (
                             <img
                                 src={user.profilePicture}

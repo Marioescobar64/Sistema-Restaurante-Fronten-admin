@@ -37,8 +37,9 @@ export const DashboardContainer = () => {
                 {/* TEXTO */}
                 <div className="bg-white/30 backdrop-blur-md rounded-xl p-6 border h-[220px] flex items-center justify-center text-center hover:scale-[1.02] transition">
                   <p className="text-[#2C1506]">
-                    Una breve explicación <br />
-                    De nuestra página web
+                   La página web de Papas Luigi está diseñada para que puedas conocer fácilmente todo lo que ofrecemos. En ella encontrarás nuestro menú, información sobre el restaurante, opciones para realizar pedidos y una experiencia visual atractiva que refleja nuestro estilo y sabor.
+Nuestro objetivo es brindarte una navegación sencilla y rápida, donde puedas descubrir nuestros productos, promociones y todo lo que hace especial a Papas Luigi desde cualquier dispositivo.<br />
+                   
                   </p>
                 </div>
 
@@ -48,7 +49,7 @@ export const DashboardContainer = () => {
                   {/* 🔥 AQUI VA TU LOGO */}
 
                   <img
-                    src="/src/assets/img/logo.png"
+                    src="/src/assets/img/restaurante.png"
                     alt="logo"
                     className="max-h-[150px] object-contain"
                   />
@@ -71,7 +72,7 @@ export const DashboardContainer = () => {
                   
                   {/* 🔥 AQUI VA TU IMAGEN */}
                   <img
-                    src="" // 👉 PON AQUI TU IMAGEN
+                    src="/src/assets/img/logo.png"
                     alt="intro"
                     className="w-full h-full object-cover rounded"
                   />
@@ -80,18 +81,17 @@ export const DashboardContainer = () => {
 
                 {/* TEXTO */}
                 <p className="text-[#2C1506]">
-                  Una introducción a nuestro proyecto o nuestra empresa
+                  Bienvenido a Papas Luigi, el lugar donde el sabor, la
+                   creatividad y la pasión por la buena comida se unen en 
+                   cada plato. Aquí no solo servimos papas, creamos experiencias
+                    únicas que combinan ingredientes de calidad, recetas irresistibles 
+                    y un ambiente pensado para que disfrutes cada momento.
+
                 </p>
 
               </div>
 
-              {/* ===================== FILA 3 ===================== */}
-              <div className="bg-white/30 backdrop-blur-md rounded-xl p-6 border h-[180px] flex items-center justify-center text-center hover:scale-[1.01] transition">
-                <p className="text-[#2C1506]">
-                  Ingresar datos en un pequeño formulario para que el administrador agregue
-                  nombre, apellido, correo, contraseña y demás.
-                </p>
-              </div>
+              
 
               {/* ===================== FILA 4 ===================== */}
               <div className="flex gap-4 items-center flex-wrap">
@@ -99,21 +99,7 @@ export const DashboardContainer = () => {
                 {/* REDES */}
                 <div className="flex gap-3">
 
-                  {/* 🔥 TIKTOK */}
-                  <div className="w-20 h-20 flex items-center justify-center">
-                    <img src="" alt="tiktok" className="w-full h-full object-contain" />
-                  </div>
-
-                  {/* 🔥 FACEBOOK */}
-                  <div className="w-20 h-20 flex items-center justify-center">
-                    <img src="" alt="facebook" className="w-full h-full object-contain" />
-                  </div>
-
-                  {/* 🔥 INSTAGRAM */}
-                  <div className="w-20 h-20 flex items-center justify-center">
-                    <img src="" alt="instagram" className="w-full h-full object-contain" />
-                  </div>
-
+                 
                 </div>
 
                 {/* CONTACTO */}

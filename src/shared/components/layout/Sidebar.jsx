@@ -9,20 +9,20 @@ export const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-60 bg-[#E8D5B7]/95 backdrop-blur-md border-r border-[#A0724A]/40 min-h-[calc(100vh-4rem)] p-4 shadow-sm">
+    <aside className="w-60 bg-[#FFF8F0]/95 backdrop-blur-md border-r border-[#C00000]/20 min-h-[calc(100vh-4rem)] p-4 shadow-sm">
 
       <ul className="space-y-2">
         {items.map((item, index) => (
           <li key={index}>
             <div
               className="
-                flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-[#4A2C0A]
+                flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-black
 
                 transition-all duration-150 ease-out
-                hover:bg-[#C4935A]/20 
+                hover:bg-[#C00000]/10 
                 hover:scale-[1.03]
 
-                active:scale-95 active:bg-[#C4935A]/30
+                active:scale-95 active:bg-[#C00000]/20
 
                 cursor-pointer
               "
