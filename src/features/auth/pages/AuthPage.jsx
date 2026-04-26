@@ -1,31 +1,40 @@
-import { useState } from "react";
-import { LoginForm } from "../../../../src/features/auth/components/LoginForm";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { LoginForm } from "../components/LoginForm";
 import { ForgotPasswordForm } from "../components/ForgotPasswordForm";
+import loginfondo from "../../../assets/img/loginfondo.png";
+import logo from "../../../assets/img/logo.png";
 
 export const AuthPage = () => {
   const [isForgot, setIsForgot] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const role = (localStorage.getItem("userRole") || "").toUpperCase();
+
+    if (role.includes("ADMIN")) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [navigate]);
 
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
       style={{
-        backgroundImage: `
-          url("/src/assets/img/loginfondo.png")
-        `,
+        backgroundImage: `url(${loginfondo})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-
       {/* CARD */}
       <div className="w-full max-w-md bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-[#C00000]/20 p-8 md:p-10 transition-all duration-300">
-
+        
         {/* LOGO */}
         <div className="flex justify-center mb-5">
           <img
-            src="/src/assets/img/logo.png"
+            src={logo}
             alt="Logo Restaurante"
-            className="h-20 w-auto drop-shadow-md"
+            className="h-16 w-auto drop-shadow-md"
           />
         </div>
 
@@ -48,7 +57,6 @@ export const AuthPage = () => {
         ) : (
           <LoginForm onForgot={() => setIsForgot(true)} />
         )}
-
       </div>
     </div>
   );

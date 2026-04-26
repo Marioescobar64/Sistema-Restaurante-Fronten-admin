@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export const Sidebar = () => {
+  const navigate = useNavigate();
+
   const items = [
     { label: "Dashboard" },
     { label: "Platillos" },
@@ -8,10 +12,17 @@ export const Sidebar = () => {
     { label: "Configuración" },
   ];
 
-  return (
-    <aside className="w-60 bg-[#FFF8F0]/95 backdrop-blur-md border-r border-[#C00000]/20 min-h-[calc(100vh-4rem)] p-4 shadow-sm">
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userName");
+    navigate("/");
+  };
 
-      <ul className="space-y-2">
+  return (
+    <aside className="w-60 bg-[#FFF8F0]/95 backdrop-blur-md border-r border-[#C00000]/20 min-h-[calc(100vh-4rem)] p-4 shadow-sm flex flex-col">
+
+      <ul className="space-y-2 flex-1">
         {items.map((item, index) => (
           <li key={index}>
             <div
@@ -39,6 +50,24 @@ export const Sidebar = () => {
           </li>
         ))}
       </ul>
+
+      {/* BOTÓN CERRAR SESIÓN */}
+      <button
+        onClick={handleLogout}
+        className="
+          w-full flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-white
+          bg-[#C00000] 
+          transition-all duration-150 ease-out
+          hover:bg-[#A00000]
+          hover:scale-[1.02]
+          active:scale-95
+          cursor-pointer
+          mt-4 border-t border-[#C00000]/30 pt-4
+        "
+      >
+        <span className="text-lg">🚪</span>
+        <span>Cerrar Sesión</span>
+      </button>
 
     </aside>
   );
