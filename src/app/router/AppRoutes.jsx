@@ -3,12 +3,15 @@ import { DashboardPage } from "../layouts/DashboardPage";
 import { AuthPage } from "../../features/auth/pages/AuthPage";
 
 const RequireAdmin = ({ children }) => {
+  const token = localStorage.getItem("authToken");
   const role = localStorage.getItem("userRole") ?? "";
-  const isAdmin = role.toUpperCase().includes("ADMIN");
 
-  if (!isAdmin) {
-    return <Navigate to="/" replace />;
-  }
+  // Sin token = no autenticado
+  if (!token) return <Navigate to="/" replace />;
+
+  // Con token pero sin rol admin
+  const isAdmin = role.toUpperCase().includes("ADMIN");
+  if (!isAdmin) return <Navigate to="/" replace />;
 
   return children;
 };

@@ -26,6 +26,9 @@ export const LoginForm = ({ onForgot }) => {
         password: password.trim(),
       });
 
+      console.log("DATA COMPLETA:", response.data);
+      console.log("ROLE:", response.data?.userDetails?.role);
+
       const data = response.data;
       const role = data?.userDetails?.role ?? "";
       const isAdmin = role.toUpperCase().includes("ADMIN");
