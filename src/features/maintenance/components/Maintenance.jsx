@@ -152,14 +152,14 @@ export const Maintenance = () => {
       </div>
 
       {/* MODAL */}
-      <MaintenanceModal
-        isOpen={openModal}
-        onClose={() => {
-          setOpenModal(false);
-          setSelectMaintenance(null);
-        }}
-        field={selectMaintenance} // 👈 lo dejamos así como tu sistema
-      />
+<MaintenanceModal
+  isOpen={openModal}
+  onClose={() => {
+    setOpenModal(false);
+    setSelectMaintenance(null);
+  }}
+  maintenance={selectMaintenance}
+/>
     </div>
   );
 };
