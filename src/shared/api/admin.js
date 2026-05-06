@@ -8,13 +8,27 @@ export const updateProduct = async (id, data) => api.put(`/product/${id}`, data)
 export const activateProduct = async (id) => api.put(`/product/${id}/activate`);
 export const deactivateProduct = async (id) => api.put(`/product/${id}/deactivate`);
 
+
 // Menú
-export const getMenuItems = async () => api.get("/menu");
-export const getMenuItemById = async (id) => api.get(`/menu/${id}`);
-export const createMenuItem = async (data) => api.post("/menu", data);
-export const updateMenuItem = async (id, data) => api.put(`/menu/${id}`, data);
-export const activateMenuItem = async (id) => api.put(`/menu/${id}/activate`);
-export const deactivateMenuItem = async (id) => api.put(`/menu/${id}/deactivate`);
+export const getMenuItems = async () => {
+  return await axiosAdmin.get("/menu");
+};
+
+export const createMenuItem = async (data) => {
+  console.log('Sending data to /menu:', data);
+  return await axiosAdmin.post("/menu", data);
+};
+
+export const updateMenuItem = async (id, data) => {
+  return await axiosAdmin.put(`/menu/${id}`, data);
+};
+
+export const deactivateMenuItem = async (id) => {
+  return await axiosAdmin.put(`/menu/${id}/deactivate`);
+};
+
+
+
 
 // Órdenes
 export const getOrders = async () => api.get("/order");
