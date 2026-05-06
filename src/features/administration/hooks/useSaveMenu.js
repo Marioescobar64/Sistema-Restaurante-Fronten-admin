@@ -7,7 +7,8 @@ export const useSaveMenu = () => {
   const saveMenu = async (data, menuId = null) => {
     // 🔹 Payload final correcto para menú
     const payload = {
-      saucerName: data.saucerName,
+      name: data.saucerName?.trim(),
+      saucerName: data.saucerName?.trim(),
       categoryType: data.categoryType,
       price: Number(data.price),
       description: data.description,
@@ -22,6 +23,7 @@ export const useSaveMenu = () => {
     if (hasPhoto) {
       const formData = new FormData();
 
+      formData.append("name", payload.name);
       formData.append("saucerName", payload.saucerName);
       formData.append("categoryType", payload.categoryType);
       formData.append("price", payload.price);

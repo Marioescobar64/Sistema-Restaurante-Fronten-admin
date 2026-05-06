@@ -21,12 +21,14 @@ export const getMenuItems = async () => {
   return await axiosAdmin.get("/menu");
 };
 
+const buildFormDataConfig = (data) => ({ });
+
 export const createMenuItem = async (data) => {
-  return await axiosAdmin.post("/menu", data);
+  return await axiosAdmin.post("/menu", data, buildFormDataConfig(data));
 };
 
 export const updateMenuItem = async (id, data) => {
-  return await axiosAdmin.put(`/menu/${id}`, data);
+  return await axiosAdmin.put(`/menu/${id}`, data, buildFormDataConfig(data));
 };
 
 export const deactivateMenuItem = async (id) => {
@@ -81,15 +83,15 @@ export const getMaintenanceRecords = async () => {
 };
 
 export const createMaintenanceRecord = async (data) => {
-  return await axiosAdmin.post("/maintenance", data);
+  return await axiosAdmin.post("/maintenance", data, buildFormDataConfig(data));
 };
 
 export const updateMaintenanceRecord = async (id, data) => {
-  return await axiosAdmin.put(`/maintenance/${id}`, data);
+  return await axiosAdmin.put(`/maintenance/${id}`, data, buildFormDataConfig(data));
 };
 
 export const deleteMaintenanceRecord = async (id) => {
-  return await axiosAdmin.put(`/maintenance/${id}/deactivate`);
+  return await axiosAdmin.put(`/maintenance/${id}/deactivate`, { isActive: false });
 };
 // Carritos
 export const getCarts = async () => api.get("/cart");
