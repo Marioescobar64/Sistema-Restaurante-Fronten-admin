@@ -6,7 +6,7 @@ const axiosAuth = axios.create({
     baseURL: import.meta.env.VITE_AUTH_URL,
     timeout: 8000,
     headers:{
-        "Content-Type": "application/json",
+        "Content-Type": "Application/json",
     }
 });
 
@@ -14,7 +14,7 @@ const  axiosAdmin = axios.create({
     baseURL: import.meta.env.VITE_ADMIN_URL,
     timeout: 80000,
     headers:{
-        "Content-Type": "application/json",
+        "Content-Type": "Application/json",
     }
 });
 
@@ -24,10 +24,6 @@ axiosAuth.interceptors.request.use( (config)=>{
     if(token){
         config.headers.Authorization = `Bearer ${token}`;
     }
-    // If data is FormData, let axios set the content-type
-    if (config.data instanceof FormData) {
-        delete config.headers['Content-Type'];
-    }
     return config;
 } );
 
@@ -36,10 +32,6 @@ axiosAdmin.interceptors.request.use( (config)=>{
     const token = useAuthStore.getState().token;
     if(token){
         config.headers.Authorization = `Bearer ${token}`;
-    }
-    // If data is FormData, let axios set the content-type
-    if (config.data instanceof FormData) {
-        delete config.headers['Content-Type'];
     }
     return config;
 } );

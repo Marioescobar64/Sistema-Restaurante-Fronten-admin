@@ -15,7 +15,6 @@ export const getMenuItems = async () => {
 };
 
 export const createMenuItem = async (data) => {
-  console.log('Sending data to /menu:', data);
   return await axiosAdmin.post("/menu", data);
 };
 
@@ -31,11 +30,15 @@ export const deactivateMenuItem = async (id) => {
 
 
 // Órdenes
-export const getOrders = async () => api.get("/order");
-export const getOrderById = async (id) => api.get(`/order/${id}`);
-export const createOrder = async (data) => api.post("/order", data);
-export const updateOrder = async (id, data) => api.put(`/order/${id}`, data);
-export const changeOrderStatus = async (id, status) => api.put(`/order/${id}`, { estado: status });
+export const getOrders = async () => {
+   return await axiosAdmin.get("/order"); };
+export const createOrder = async (data) => { 
+  return await axiosAdmin.post("/order", data); };
+export const updateOrder = async (id, data) => { 
+  return await axiosAdmin.put(`/order/${id}`, data); };
+
+export const deactivateOrder = async (id, status) => {
+   return await axiosAdmin.put(`/order/${id}`, { estado: status }); };
 
 // Reservaciones
 export const getReservations = async () => api.get("/reservation");
@@ -45,11 +48,18 @@ export const updateReservation = async (id, data) => api.put(`/reservation/${id}
 export const changeReservationStatus = async (id, status) => api.put(`/reservation/${id}`, { estado: status });
 
 // Mesas
-export const getTables = async () => api.get("/table");
-export const getTableById = async (id) => api.get(`/table/${id}`);
-export const createTable = async (data) => api.post("/table", data);
-export const updateTable = async (id, data) => api.put(`/table/${id}`, data);
-export const changeTableStatus = async (id, status) => api.put(`/table/${id}`, { estado: status });
+export const getTables = async () => {
+   return await axiosAdmin.get("/table"); };
+
+export const createTable = async (data) => { 
+  return await axiosAdmin.post("/table", data); };
+
+export const updateTable = async (id, data) => { 
+  return await axiosAdmin.put(`/table/${id}`, data); };
+
+export const deactivateTable = async (id, status) => {
+   return await axiosAdmin.put(`/table/${id}`, { estado: status }); };
+
 
 // Eventos
 export const getEvents = async () => api.get("/event");
