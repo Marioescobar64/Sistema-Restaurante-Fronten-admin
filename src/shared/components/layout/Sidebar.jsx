@@ -1,15 +1,20 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export const Sidebar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const items = [
-    { label: "Dashboard" },
-    { label: "Platillos" },
-    { label: "Órdenes" },
-    { label: "Mesas" },
-    { label: "Usuarios" },
-    { label: "Configuración" },
+    { label: "Dashboard", path: "/dashboard", icon: "🏠" },
+    { label: "Platillos", path: "/dashboard/platillos", icon: "🍕" },
+    { label: "Productos", path: "/dashboard/productos", icon: "🛒" },
+    { label: "Órdenes", path: "/dashboard/ordenes", icon: "🧾" },
+    { label: "Reservaciones", path: "/dashboard/reservaciones", icon: "📅" },
+    { label: "Mesas", path: "/dashboard/mesas", icon: "🍽️" },
+    { label: "Eventos", path: "/dashboard/eventos", icon: "🎉" },
+    { label: "Mantenimiento", path: "/dashboard/mantenimiento", icon: "🛠️" },
+    { label: "Carritos", path: "/dashboard/carritos", icon: "🛍️" },
+    { label: "Administración", path: "/dashboard/administracion", icon: "⚙️" },
   ];
 
   const handleLogout = () => {
@@ -19,44 +24,38 @@ export const Sidebar = () => {
     navigate("/");
   };
 
+  const isActive = (path) => {
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
+
   return (
     <aside className="w-60 bg-[#FFF8F0]/95 backdrop-blur-md border-r border-[#C00000]/20 min-h-[calc(100vh-4rem)] p-4 shadow-sm flex flex-col">
-
       <ul className="space-y-2 flex-1">
         {items.map((item, index) => (
           <li key={index}>
-            <div
-              className="
-                flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-black
-
+            <button
+              type="button"
+              onClick={() => navigate(item.path)}
+              className={`
+                w-full text-left flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-black
                 transition-all duration-150 ease-out
-                hover:bg-[#C00000]/10 
-                hover:scale-[1.03]
-
+                hover:bg-[#C00000]/10 hover:scale-[1.03]
                 active:scale-95 active:bg-[#C00000]/20
-
-                cursor-pointer
-              "
+                ${isActive(item.path) ? "bg-[#C00000]/15 border-l-4 border-[#C00000]" : ""}
+              `}
             >
-
-              {/* ICONO */}
-              <span className="text-sm transition-transform duration-150 group-hover:scale-110">
-                {getIcon(item.label)}
-              </span>
-
-              {/* LABEL */}
+              <span className="text-sm">{item.icon}</span>
               <span>{item.label}</span>
-            </div>
+            </button>
           </li>
         ))}
       </ul>
 
-      {/* BOTÓN CERRAR SESIÓN */}
       <button
         onClick={handleLogout}
         className="
           w-full flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-white
-          bg-[#C00000] 
+          bg-[#C00000]
           transition-all duration-150 ease-out
           hover:bg-[#A00000]
           hover:scale-[1.02]
@@ -68,20 +67,6 @@ export const Sidebar = () => {
         <span className="text-lg">🚪</span>
         <span>Cerrar Sesión</span>
       </button>
-
     </aside>
   );
-};
-
-// ICONOS
-const getIcon = (label) => {
-  switch (label) {
-    case "Dashboard": return "🏠";
-    case "Platillos": return "🍕";
-    case "Órdenes": return "🧾";
-    case "Mesas": return "🍽️";
-    case "Usuarios": return "👤";
-    case "Configuración": return "⚙️";
-    default: return "•";
-  }
 };
