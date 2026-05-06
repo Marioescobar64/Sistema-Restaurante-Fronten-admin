@@ -45,3 +45,27 @@ export const createReservation = async (data) => axiosAdmin.post("/reservation",
 export const updateReservation = async (id, data) => axiosAdmin.put(`/reservation/${id}`, data);
 export const changeReservationStatus = async (id, status) =>
     axiosAdmin.put(`/reservation/${id}`, { estado: status });
+
+// ================= EVENTS =================
+export const getEvents = async () => axiosAdmin.get("/event");
+export const getEventById = async (id) => axiosAdmin.get(`/event/${id}`);
+export const createEvent = async (data) => axiosAdmin.post("/event", data);
+export const updateEvent = async (id, data) => axiosAdmin.put(`/event/${id}`, data);
+export const changeEventStatus = async (id, status) => axiosAdmin.put(`/event/${id}`, { isActive: status });
+
+// ================= MAINTENANCE =================
+export const getMaintenanceRecords = async () => axiosAdmin.get("/maintenance");
+export const createMaintenanceRecord = async (data) => axiosAdmin.post("/maintenance", data);
+export const updateMaintenanceRecord = async (id, data) => axiosAdmin.put(`/maintenance/${id}`, data);
+export const deleteMaintenanceRecord = async (id) => axiosAdmin.put(`/maintenance/${id}/deactivate`);
+
+// ================= CARTS =================
+export const getCarts = async () => axiosAdmin.get("/cart");
+export const getCartById = async (id) => axiosAdmin.get(`/cart/${id}`);
+export const createCart = async (data) => axiosAdmin.post("/cart", data);
+export const updateCart = async (id, data) => axiosAdmin.put(`/cart/${id}`, data);
+
+// ================= GENERAL ADMINISTRATION =================
+export const getAdministration = async () => axiosAdmin.get("/administration");
+export const createAdministration = async (data) => axiosAdmin.post("/administration", data);
+export const updateAdministration = async (id, data) => axiosAdmin.put(`/administration/${id}`, data);

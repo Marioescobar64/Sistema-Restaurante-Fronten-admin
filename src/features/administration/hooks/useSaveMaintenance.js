@@ -1,3 +1,6 @@
+
+
+
 import { useMaintenanceStore } from "../../users/store/adminStore";
 
 export const useSaveMaintenance = () => {
@@ -54,7 +57,7 @@ export const useSaveMaintenance = () => {
       formData.append("location", payload.location);
       formData.append("status", payload.status);
 
-      formData.append("image", data.photo[0]);
+      formData.append("photo", data.photo[0]);
 
       body = formData;
     }
