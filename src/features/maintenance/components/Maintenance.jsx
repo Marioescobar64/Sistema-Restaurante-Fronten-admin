@@ -11,8 +11,15 @@ import { showConfirmToast } from "../../auth/components/ConfirmModal";
 
 export const Maintenance = () => {
 
-  // STORE
-  const { Maintenances = [], loading, error, getMaintenances, deleteField } = useMaintenanceStore();
+  // ✅ USANDO TU STORE REAL
+  const {
+    maintenances = [],
+    loading,
+    error,
+    getMaintenanceRecords,
+    deleteMaintenance
+  } = useMaintenanceStore();
+
   const { openConfirm } = useUIStore();
 
   // STATE
@@ -21,8 +28,8 @@ export const Maintenance = () => {
 
   // LOAD DATA
   useEffect(() => {
-    getMaintenances();
-  }, [getMaintenances]);
+    getMaintenanceRecords();
+  }, [getMaintenanceRecords]);
 
   // TOAST ERROR
   useToastEffect(() => {
@@ -65,7 +72,7 @@ export const Maintenance = () => {
 
       {/* GRID */}
       <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {Maintenances.map((maintenance) => (
+        {maintenances.map((maintenance) => (
           <div
             key={maintenance._id}
             className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:scale-[1.02]"
@@ -86,7 +93,6 @@ export const Maintenance = () => {
             {/* CONTENIDO */}
             <div className="p-5">
 
-              {/* TÍTULO */}
               <h2 className="text-xl font-bold text-main-blue">
                 Mesa #{maintenance.tableNumber}
               </h2>
@@ -132,7 +138,7 @@ export const Maintenance = () => {
                     showConfirmToast({
                       title: "Eliminar mesa",
                       message: `¿Eliminar mesa #${maintenance.tableNumber}?`,
-                      onConfirm: () => deleteField(maintenance._id),
+                      onConfirm: () => deleteMaintenance(maintenance._id),
                     })
                   }
                 >
@@ -152,7 +158,7 @@ export const Maintenance = () => {
           setOpenModal(false);
           setSelectMaintenance(null);
         }}
-        field={selectMaintenance} // 👈 importante mantener esto
+        field={selectMaintenance} // 👈 lo dejamos así como tu sistema
       />
     </div>
   );

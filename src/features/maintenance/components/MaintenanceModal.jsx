@@ -154,12 +154,11 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
                 })}
                 className="input"
               >
-                <option value="">Seleccione</option>
-                <option value="Salón Principal">Salón Principal</option>
-                <option value="Terraza">Terraza</option>
-                <option value="Área VIP">Área VIP</option>
-                <option value="Jardín">Jardín</option>
-                <option value="Interior">Interior</option>
+            <option value="SALON_PRINCIPAL">Salón Principal</option>
+            <option value="TERRAZA">Terraza</option>
+            <option value="AREA_VIP">Área VIP</option>
+            <option value="JARDIN">Jardín</option>
+            <option value="INTERIOR">Interior</option>
               </select>
               {errors.location && <p className="text-red-500 text-xs">{errors.location.message}</p>}
             </div>
@@ -168,10 +167,10 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
             <div className="flex flex-col">
               <label className="text-sm font-semibold">Estado</label>
               <select {...register("status")} className="input">
-                <option value="Disponible">Disponible</option>
-                <option value="Ocupada">Ocupada</option>
-                <option value="Reservada">Reservada</option>
-                <option value="Mantenimiento">Mantenimiento</option>
+              <option value="DISPONIBLE">Disponible</option>
+              <option value="OCUPADA">Ocupada</option>
+              <option value="RESERVADA">Reservada</option>
+              <option value="MANTENIMIENTO">Mantenimiento</option>
               </select>
             </div>
 

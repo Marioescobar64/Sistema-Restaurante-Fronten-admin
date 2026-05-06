@@ -45,12 +45,20 @@ export const updateEvent = async (id, data) => api.put(`/event/${id}`, data);
 export const changeEventStatus = async (id, status) => api.put(`/event/${id}`, { isActive: status });
 
 // Mantenimiento
-export const getMaintenanceRecords = async () => api.get("/maintenance");
-// xport const getMaintenanceById = async (id) => api.get(`/maintenance/${id}`);
-export const createMaintenanceRecord = async (data) => api.post("/maintenance", data);
-export const updateMaintenanceRecord = async (id, data) => api.put(`/maintenance/${id}`, data);
+export const getMaintenanceRecords = async () => {
+  return await axiosAdmin.get("/maintenance");
+};
+
+export const createMaintenanceRecord = async (data) => {
+  return await axiosAdmin.post("/maintenance", data);
+};
+
+export const updateMaintenanceRecord = async (id, data) => {
+  return await axiosAdmin.put(`/maintenance/${id}`, data);
+};
+
 export const deleteMaintenanceRecord = async (id) => {
-    return await axiosAdmin.put(`/maintenance/${id}/deactivate`);
+  return await axiosAdmin.put(`/maintenance/${id}/deactivate`);
 };
 // Carritos
 export const getCarts = async () => api.get("/cart");
