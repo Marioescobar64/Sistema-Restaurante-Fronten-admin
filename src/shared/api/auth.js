@@ -1,4 +1,4 @@
-import api from "./api";
+import { axiosAuth } from "./api";
 
 export const login = async (data) => api.post("/auth/login", data);
 export const logout = async () => api.post("/auth/logout");

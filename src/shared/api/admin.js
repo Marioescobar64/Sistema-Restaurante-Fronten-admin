@@ -1,4 +1,4 @@
-import api from "./api";
+import { axiosAdmin } from "../../shared/api/api.js";
 
 // Productos
 export const getProducts = async () => api.get("/product");
@@ -46,10 +46,12 @@ export const changeEventStatus = async (id, status) => api.put(`/event/${id}`, {
 
 // Mantenimiento
 export const getMaintenanceRecords = async () => api.get("/maintenance");
-export const getMaintenanceById = async (id) => api.get(`/maintenance/${id}`);
+// xport const getMaintenanceById = async (id) => api.get(`/maintenance/${id}`);
 export const createMaintenanceRecord = async (data) => api.post("/maintenance", data);
 export const updateMaintenanceRecord = async (id, data) => api.put(`/maintenance/${id}`, data);
-
+export const deleteMaintenanceRecord = async (id) => {
+    return await axiosAdmin.put(`/maintenance/${id}/deactivate`);
+};
 // Carritos
 export const getCarts = async () => api.get("/cart");
 export const getCartById = async (id) => api.get(`/cart/${id}`);
@@ -58,6 +60,6 @@ export const updateCart = async (id, data) => api.put(`/cart/${id}`, data);
 
 // Administración general
 export const getAdministration = async () => api.get("/administration");
-export const getAdministrationById = async (id) => api.get(`/administration/${id}`);
+// export const getAdministrationById = async (id) => api.get(`/administration/${id}`);
 export const createAdministration = async (data) => api.post("/administration", data);
 export const updateAdministration = async (id, data) => api.put(`/administration/${id}`, data);
