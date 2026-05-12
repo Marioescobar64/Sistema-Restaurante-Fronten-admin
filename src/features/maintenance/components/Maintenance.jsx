@@ -183,18 +183,31 @@ export const Maintenance = () => {
         </div>
       </div>
 
-      <p
-        style={{
-          fontSize: 11,
-          fontWeight: 500,
-          letterSpacing: ".08em",
-          color: "#B91C1C",
-          textTransform: "uppercase",
-          marginBottom: 14,
-        }}
-      >
-        Tarjetas de mesa
-      </p>
+      <div
+  style={{
+    background: "#fff",
+    borderRadius: 16,
+    border: "0.5px solid rgba(239,68,68,0.2)",
+    borderLeft: "4px solid #EF4444",
+    padding: "16px 20px",
+    marginBottom: "1rem",
+  }}
+>
+  <h2
+    style={{
+      fontFamily: "'Playfair Display', serif",
+      fontSize: 20,
+      fontWeight: 600,
+      color: "#7F1D1D",
+      marginBottom: 4,
+    }}
+  >
+    Tarjetas de mesa
+  </h2>
+  <p style={{ fontSize: 13, color: "#B91C1C", margin: 0 }}>
+    Mesas: Disponibles,Ocupadas,Reservadas y en Mantenimiento
+  </p>
+</div>
 
       {/* GRID */}
       <div
