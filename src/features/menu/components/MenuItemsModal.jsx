@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMaintenanceStore } from "../../users/store/adminStore";
+import { useMenuStore } from "../../users/store/menuStore.js";
 import { Spinner } from "@material-tailwind/react";
-import { useSaveMaintenance } from "../../administration/hooks/useSaveMaintenance";
+import { useSaveMenu } from "../../administration/hooks/useSaveMenu";
 import { showSuccess, showError } from "../../../shared/utils/toast.js";
 
-export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
+export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
   const {
     register,
     handleSubmit,
@@ -14,37 +14,37 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
     formState: { errors },
   } = useForm();
 
-  const { saveMaintenance } = useSaveMaintenance();
-  const loading = useMaintenanceStore((state) => state.loading);
+  const { saveMenu } = useSaveMenu();
+  const loading = useMenuStore((state) => state.loading);
 
   const [preview, setPreview] = useState(null);
 
   // 🔹 Cargar datos al editar
   useEffect(() => {
     if (isOpen) {
-      if (maintenance) {
+      if (menuItem) {
         reset({
-          tableNumber: maintenance.tableNumber,
-          capacity: maintenance.capacity,
-          location: maintenance.location,
-          status: maintenance.status,
+          saucerName: menuItem.saucerName,
+          categoryType: menuItem.categoryType,
+          price: menuItem.price,
+          description: menuItem.description,
         });
 
         setPreview(
-          `https://res.cloudinary.com/dxsl6ww6y/image/upload/v1777998302/kinalSport/${maintenance.photo}`
+          `https://res.cloudinary.com/dxsl6ww6y/image/upload/v1777998302/kinalSport/${menuItem.photo}`
         );
       } else {
         reset({
-          tableNumber: "",
-          capacity: "",
-          location: "",
-          status: "Disponible",
+          saucerName: "",
+          categoryType: "Desayuno",
+          price: "",
+          description: "",
           photo: null,
         });
         setPreview(null);
       }
     }
-  }, [isOpen, maintenance, reset]);
+  }, [isOpen, menuItem, reset]);
 
   // 🔹 Preview imagen
   useEffect(() => {
@@ -59,19 +59,19 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
   // 🔹 Submit
   const onSubmit = async (data) => {
     try {
-      await saveMaintenance(data, maintenance?._id);
+      await saveMenu(data, menuItem?._id);
 
       showSuccess(
-        maintenance
-          ? "Mantenimiento actualizado correctamente"
-          : "Mantenimiento creado correctamente"
+        menuItem
+          ? "Platillo actualizado correctamente"
+          : "Platillo creado correctamente"
       );
 
       reset();
       setPreview(null);
       onClose();
     } catch {
-      showError("Error al guardar mantenimiento");
+      showError("Error al guardar platillo");
     }
   };
 
@@ -90,10 +90,10 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
           }}
         >
           <h2 className="text-xl sm:text-2xl font-bold">
-            {maintenance ? "Editar Mesa" : "Nueva Mesa"}
+            {menuItem ? "Editar Platillo" : "Nuevo Platillo"}
           </h2>
           <p className="text-xs sm:text-sm opacity-80">
-            Completa la información del mantenimiento
+            Completa la información del platillo
           </p>
         </div>
 
@@ -117,61 +117,62 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
           {/* INPUTS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-            {/* Número de mesa */}
-            <div className="flex flex-col">
-              <label className="text-sm font-semibold">Número de mesa</label>
+            {/* Nombre del platillo */}
+            <div className="flex flex-col md:col-span-2">
+              <label className="text-sm font-semibold">Nombre del platillo</label>
               <input
-                type="number"
-                {...register("tableNumber", {
-                  required: "El número es obligatorio",
-                  min: { value: 1, message: "Debe ser mayor a 0" },
+                type="text"
+                {...register("saucerName", {
+                  required: "El nombre es obligatorio",
                 })}
                 className="input"
               />
-              {errors.tableNumber && <p className="text-red-500 text-xs">{errors.tableNumber.message}</p>}
+              {errors.saucerName && <p className="text-red-500 text-xs">{errors.saucerName.message}</p>}
             </div>
 
-            {/* Capacidad */}
+            {/* Categoría */}
             <div className="flex flex-col">
-              <label className="text-sm font-semibold">Capacidad</label>
-              <input
-                type="number"
-                {...register("capacity", {
-                  required: "La capacidad es obligatoria",
-                  min: { value: 1, message: "Debe ser mayor a 0" },
-                })}
-                className="input"
-              />
-              {errors.capacity && <p className="text-red-500 text-xs">{errors.capacity.message}</p>}
-            </div>
-
-            {/* Ubicación */}
-            <div className="flex flex-col">
-              <label className="text-sm font-semibold">Ubicación</label>
+              <label className="text-sm font-semibold">Categoría</label>
               <select
-                {...register("location", {
-                  required: "La ubicación es obligatoria",
+                {...register("categoryType", {
+                  required: "La categoría es obligatoria",
                 })}
                 className="input"
               >
-                <option value="Salón Principal">Salón Principal</option>
-                <option value="Terraza">Terraza</option>
-                <option value="Área VIP">Área VIP</option>
-                <option value="Jardín">Jardín</option>
-                <option value="Interior">Interior</option>
+                <option value="Platillo-Familiar">Platillo Familiar</option>
+                <option value="Desayuno">Desayuno</option>
+                <option value="Almuerzo">Almuerzo</option>
+                <option value="Cena">Cena</option>
               </select>
-              {errors.location && <p className="text-red-500 text-xs">{errors.location.message}</p>}
+              {errors.categoryType && <p className="text-red-500 text-xs">{errors.categoryType.message}</p>}
             </div>
 
-            {/* Estado */}
+            {/* Precio */}
             <div className="flex flex-col">
-              <label className="text-sm font-semibold">Estado</label>
-              <select {...register("status")} className="input">
-              <option value="Disponible">Disponible</option>
-              <option value="Ocupada">Ocupada</option>
-              <option value="Reservada">Reservada</option>
-              <option value="Mantenimiento">Mantenimiento</option>
-            </select>
+              <label className="text-sm font-semibold">Precio</label>
+              <input
+                type="number"
+                step="0.01"
+                {...register("price", {
+                  required: "El precio es obligatorio",
+                  min: { value: 0, message: "El precio no puede ser negativo" },
+                })}
+                className="input"
+              />
+              {errors.price && <p className="text-red-500 text-xs">{errors.price.message}</p>}
+            </div>
+
+            {/* Descripción */}
+            <div className="flex flex-col md:col-span-2">
+              <label className="text-sm font-semibold">Descripción</label>
+              <textarea
+                {...register("description", {
+                  maxLength: { value: 500, message: "La descripción no puede exceder 500 caracteres" },
+                })}
+                className="input"
+                rows="3"
+              />
+              {errors.description && <p className="text-red-500 text-xs">{errors.description.message}</p>}
             </div>
 
             {/* Imagen */}
@@ -206,10 +207,10 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
             >
               {loading ? (
                 <Spinner className="h-4 w-4" />
-              ) : maintenance ? (
+              ) : menuItem ? (
                 "Guardar cambios"
               ) : (
-                "Crear mesa"
+                "Crear platillo"
               )}
             </button>
           </div>

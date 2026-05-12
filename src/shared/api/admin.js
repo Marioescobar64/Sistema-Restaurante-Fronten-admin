@@ -1,71 +1,106 @@
 import { axiosAdmin } from "../../shared/api/api.js";
 
-// ================= TOURNAMENTS =================
-export const getTournaments = async () => axiosAdmin.get("/tournaments");
-export const createTournament = async (data) => axiosAdmin.post("/tournaments", data);
-export const updateTournament = async (id, data) => axiosAdmin.put(`/tournaments/${id}`, data);
-export const deleteTournament = async (id) => axiosAdmin.put(`/tournaments/${id}/deactivate`);
+// Productos
+export const getProducts = async () => {
+  return await axiosAdmin.get("/product");
+};
 
-// ================= TEAMS =================
-export const getTeams = async () => axiosAdmin.get("/teams");
-export const createTeam = async (data) => axiosAdmin.post("/teams", data, {
-    headers: { "Content-Type": "multipart/form-data" },
-});
-export const updateTeam = async (id, data) => axiosAdmin.put(`/teams/${id}`, data, {
-    headers: { "Content-Type": "multipart/form-data" },
-});
-export const deleteTeam = async (id) => axiosAdmin.put(`/teams/${id}/deactivate`);
+export const createProduct = async (data) => {
+   return await axiosAdmin.post("/product", data);
+   };
+export const updateProduct = async (id, data) => { 
+  return await axiosAdmin.put(`/product/${id}`, data); 
+};
+export const deactivateProduct = async (id) => 
+  { return await axiosAdmin.put(`/product/${id}/deactivate`); 
+};
 
-// ================= FIELDS =================
-export const getFields = async () => axiosAdmin.get("/fields");
-export const createField = async (data) => axiosAdmin.post("/fields", data, {
-    headers: { "Content-Type": "multipart/form-data" },
-});
-export const updateField = async (id, data) => axiosAdmin.put(`/fields/${id}`, data, {
-    headers: { "Content-Type": "multipart/form-data" },
-});
-export const deleteField = async (id) => axiosAdmin.put(`/fields/${id}/deactivate`);
 
-// ================= PRODUCTS =================
-export const getProducts = async () => axiosAdmin.get("/product");
-export const getProductById = async (id) => axiosAdmin.get(`/product/${id}`);
-export const createProduct = async (data) => axiosAdmin.post("/product", data);
-export const updateProduct = async (id, data) => axiosAdmin.put(`/product/${id}`, data);
-export const activateProduct = async (id) => axiosAdmin.put(`/product/${id}/activate`);
-export const deactivateProduct = async (id) => axiosAdmin.put(`/product/${id}/deactivate`);
+// Menú
+export const getMenuItems = async () => {
+  return await axiosAdmin.get("/menu");
+};
 
-// ================= ORDERS =================
-export const getOrders = async () => axiosAdmin.get("/order");
-export const createOrder = async (data) => axiosAdmin.post("/order", data);
-export const updateOrder = async (id, data) => axiosAdmin.put(`/order/${id}`, data);
+const buildFormDataConfig = (data) => ({ });
 
-// ================= RESERVATIONS =================
-export const getReservations = async () => axiosAdmin.get("/reservation");
-export const createReservation = async (data) => axiosAdmin.post("/reservation", data);
-export const updateReservation = async (id, data) => axiosAdmin.put(`/reservation/${id}`, data);
-export const changeReservationStatus = async (id, status) =>
-    axiosAdmin.put(`/reservation/${id}`, { estado: status });
+export const createMenuItem = async (data) => {
+  return await axiosAdmin.post("/menu", data, buildFormDataConfig(data));
+};
 
-// ================= EVENTS =================
-export const getEvents = async () => axiosAdmin.get("/event");
-export const getEventById = async (id) => axiosAdmin.get(`/event/${id}`);
-export const createEvent = async (data) => axiosAdmin.post("/event", data);
-export const updateEvent = async (id, data) => axiosAdmin.put(`/event/${id}`, data);
-export const changeEventStatus = async (id, status) => axiosAdmin.put(`/event/${id}`, { isActive: status });
+export const updateMenuItem = async (id, data) => {
+  return await axiosAdmin.put(`/menu/${id}`, data, buildFormDataConfig(data));
+};
 
-// ================= MAINTENANCE =================
-export const getMaintenanceRecords = async () => axiosAdmin.get("/maintenance");
-export const createMaintenanceRecord = async (data) => axiosAdmin.post("/maintenance", data);
-export const updateMaintenanceRecord = async (id, data) => axiosAdmin.put(`/maintenance/${id}`, data);
-export const deleteMaintenanceRecord = async (id) => axiosAdmin.put(`/maintenance/${id}/deactivate`);
+export const deactivateMenuItem = async (id) => {
+  return await axiosAdmin.put(`/menu/${id}/deactivate`);
+};
 
-// ================= CARTS =================
-export const getCarts = async () => axiosAdmin.get("/cart");
-export const getCartById = async (id) => axiosAdmin.get(`/cart/${id}`);
-export const createCart = async (data) => axiosAdmin.post("/cart", data);
-export const updateCart = async (id, data) => axiosAdmin.put(`/cart/${id}`, data);
 
-// ================= GENERAL ADMINISTRATION =================
-export const getAdministration = async () => axiosAdmin.get("/administration");
-export const createAdministration = async (data) => axiosAdmin.post("/administration", data);
-export const updateAdministration = async (id, data) => axiosAdmin.put(`/administration/${id}`, data);
+
+
+// Órdenes
+export const getOrders = async () => {
+   return await axiosAdmin.get("/order"); };
+export const createOrder = async (data) => { 
+  return await axiosAdmin.post("/order", data); };
+export const updateOrder = async (id, data) => { 
+  return await axiosAdmin.put(`/order/${id}`, data); };
+
+export const deactivateOrder = async (id, status) => {
+   return await axiosAdmin.put(`/order/${id}`, { estado: status }); };
+
+// Reservaciones
+export const getReservations = async () => api.get("/reservation");
+export const getReservationById = async (id) => api.get(`/reservation/${id}`);
+export const createReservation = async (data) => api.post("/reservation", data);
+export const updateReservation = async (id, data) => api.put(`/reservation/${id}`, data);
+export const changeReservationStatus = async (id, status) => api.put(`/reservation/${id}`, { estado: status });
+
+// Mesas
+export const getTables = async () => {
+   return await axiosAdmin.get("/table"); };
+
+export const createTable = async (data) => { 
+  return await axiosAdmin.post("/table", data); };
+
+export const updateTable = async (id, data) => { 
+  return await axiosAdmin.put(`/table/${id}`, data); };
+
+export const deactivateTable = async (id, status) => {
+   return await axiosAdmin.put(`/table/${id}`, { estado: status }); };
+
+
+// Eventos
+export const getEvents = async () => api.get("/event");
+export const getEventById = async (id) => api.get(`/event/${id}`);
+export const createEvent = async (data) => api.post("/event", data);
+export const updateEvent = async (id, data) => api.put(`/event/${id}`, data);
+export const changeEventStatus = async (id, status) => api.put(`/event/${id}`, { isActive: status });
+
+// Mantenimiento
+export const getMaintenanceRecords = async () => {
+  return await axiosAdmin.get("/maintenance");
+};
+
+export const createMaintenanceRecord = async (data) => {
+  return await axiosAdmin.post("/maintenance", data, buildFormDataConfig(data));
+};
+
+export const updateMaintenanceRecord = async (id, data) => {
+  return await axiosAdmin.put(`/maintenance/${id}`, data, buildFormDataConfig(data));
+};
+
+export const deleteMaintenanceRecord = async (id) => {
+  return await axiosAdmin.put(`/maintenance/${id}/deactivate`, { isActive: false });
+};
+// Carritos
+export const getCarts = async () => api.get("/cart");
+export const getCartById = async (id) => api.get(`/cart/${id}`);
+export const createCart = async (data) => api.post("/cart", data);
+export const updateCart = async (id, data) => api.put(`/cart/${id}`, data);
+
+// Administración general
+export const getAdministration = async () => api.get("/administration");
+// export const getAdministrationById = async (id) => api.get(`/administration/${id}`);
+export const createAdministration = async (data) => api.post("/administration", data);
+export const updateAdministration = async (id, data) => api.put(`/administration/${id}`, data);
