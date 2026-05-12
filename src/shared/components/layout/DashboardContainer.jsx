@@ -33,15 +33,15 @@ export const DashboardContainer = ({ children }) => {
         </div>
 
         <p className="text-[#2C1506]">
-          Bienvenido a Papas Luigi, el lugar donde el sabor, la creatividad y la pasi�n por la buena comida se unen en cada plato.
-          Aqu� no solo servimos papas, creamos experiencias �nicas que combinan ingredientes de calidad, recetas irresistibles y un ambiente pensado para que disfrutes cada momento.
+          Bienvenido a Papas Luigi, el lugar donde el sabor, la creatividad y la pasion por la buena comida se unen en cada plato.
+          Aqui no solo servimos papas, creamos experiencias unicas que combinan ingredientes de calidad, recetas irresistibles y un ambiente pensado para que disfrutes cada momento.
         </p>
       </div>
 
       <div className="flex gap-4 items-center flex-wrap">
         <div className="flex-1 bg-white/30 backdrop-blur-md rounded-xl p-4 border h-[80px] flex items-center justify-center">
           <p className="text-[#2C1506]">
-            �Problemas? Cont�ctanos: <strong>838392382</strong>
+            Problemas? Contactanos: <strong>838392382</strong>
           </p>
         </div>
       </div>
