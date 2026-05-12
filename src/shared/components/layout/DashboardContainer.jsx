@@ -8,9 +8,9 @@ export const DashboardContainer = ({ children }) => {
       <div className="grid md:grid-cols-2 gap-6">
         <div className="bg-white/30 backdrop-blur-md rounded-xl p-6 border h-[220px] flex items-center justify-center text-center hover:scale-[1.02] transition">
           <p className="text-[#2C1506]">
-            La página web de Papas Luigi está diseñada para que puedas conocer fácilmente todo lo que ofrecemos.
-            En ella encontrarás nuestro menú, información sobre el restaurante, opciones para realizar pedidos y una experiencia visual atractiva que refleja nuestro estilo y sabor.
-            Nuestro objetivo es brindarte una navegación sencilla y rápida, donde puedas descubrir nuestros productos, promociones y todo lo que hace especial a Papas Luigi desde cualquier dispositivo.
+            La pÃ¡gina web de Papas Luigi estÃ¡ diseÃ±ada para que puedas conocer fÃ¡cilmente todo lo que ofrecemos.
+            En ella encontrarÃ¡s nuestro menÃº, informaciÃ³n sobre el restaurante, opciones para realizar pedidos y una experiencia visual atractiva que refleja nuestro estilo y sabor.
+            Nuestro objetivo es brindarte una navegaciÃ³n sencilla y rÃ¡pida, donde puedas descubrir nuestros productos, promociones y todo lo que hace especial a Papas Luigi desde cualquier dispositivo.
           </p>
         </div>
 
@@ -33,15 +33,15 @@ export const DashboardContainer = ({ children }) => {
         </div>
 
         <p className="text-[#2C1506]">
-          Bienvenido a Papas Luigi, el lugar donde el sabor, la creatividad y la pasión por la buena comida se unen en cada plato.
-          Aquí no solo servimos papas, creamos experiencias únicas que combinan ingredientes de calidad, recetas irresistibles y un ambiente pensado para que disfrutes cada momento.
+          Bienvenido a Papas Luigi, el lugar donde el sabor, la creatividad y la pasiï¿½n por la buena comida se unen en cada plato.
+          Aquï¿½ no solo servimos papas, creamos experiencias ï¿½nicas que combinan ingredientes de calidad, recetas irresistibles y un ambiente pensado para que disfrutes cada momento.
         </p>
       </div>
 
       <div className="flex gap-4 items-center flex-wrap">
         <div className="flex-1 bg-white/30 backdrop-blur-md rounded-xl p-4 border h-[80px] flex items-center justify-center">
           <p className="text-[#2C1506]">
-            ¿Problemas? Contáctanos: <strong>838392382</strong>
+            ï¿½Problemas? Contï¿½ctanos: <strong>838392382</strong>
           </p>
         </div>
       </div>
