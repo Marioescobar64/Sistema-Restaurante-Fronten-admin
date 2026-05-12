@@ -187,6 +187,13 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
             </div>
           </div>
 
+          {/* ID DE DISEÑO */}
+          {menuItem && (
+            <p className="text-xs text-gray-400 mt-2 truncate">
+              ID de diseño: {menuItem.idDiseno || menuItem._id}
+            </p>
+          )}
+
           {/* BOTONES */}
           <div className="flex gap-3 pt-4 border-t">
             <button

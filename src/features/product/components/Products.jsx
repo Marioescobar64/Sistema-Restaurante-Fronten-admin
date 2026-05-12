@@ -1,70 +1,122 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useEffect as useToastEffect } from "react";
-import { useState } from "react";
 
-import { useProductStore } from "../../users/store/productStore"; // Tu Store real de productos
+import { useProductStore } from "../../users/store/productStore"; 
 import { useUIStore } from "../../auth/store/uiStore";
 
 import { showError } from "../../../shared/utils/toast";
 import { Spinner } from "@material-tailwind/react";
-import { ProductModal } from "./ProductsModal"; // Tu nuevo modal de productos
+import { ProductModal } from "./ProductsModal"; 
 import { showConfirmToast } from "../../auth/components/ConfirmModal";
 
+const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500&display=swap');`;
+
+const statusStyle = (isActive) => {
+  if (isActive !== false) return { background: "#FEE2E2", color: "#B91C1C" }; // activo
+  return { background: "#FECACA", color: "#A32D2D" }; // inactivo
+};
+
 export const Products = () => {
-
-  // ✅ USANDO TU STORE REAL DE PRODUCTOS
-  const {
-    products = [],
-    loading,
-    error,
-    getProducts,
-    deleteProduct
-  } = useProductStore();
-
+  const { products = [], loading, error, getProducts, deleteProduct } = useProductStore();
   const { openConfirm } = useUIStore();
 
-  // STATE
   const [openModal, setOpenModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // LOAD DATA
-  useEffect(() => {
-    getProducts();
-  }, [getProducts]);
+  useEffect(() => { getProducts(); }, [getProducts]);
 
-  // TOAST ERROR
-  useToastEffect(() => {
-    if (error) showError(error);
-  }, [error]);
+  useToastEffect(() => { if (error) showError(error); }, [error]);
 
-  // LOADING
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Spinner className="h-10 w-10 text-blue-500" />
+        <Spinner className="h-10 w-10" style={{ color: "#EF4444" }} />
       </div>
     );
   }
 
   return (
-    <div className="p-4">
+    <div style={{ minHeight: "100vh", padding: "1.5rem", fontFamily: "'DM Sans', sans-serif" }}>
+      <style>{FONTS}</style>
+      <style>{`
+        .rm-card {
+          background:#fff;
+          border-radius:16px;
+          border:0.5px solid rgba(100,60,20,0.1);
+          overflow:hidden;
+          transition:transform .2s, box-shadow .2s;
+        }
+        .rm-card:hover {
+          transform:translateY(-3px);
+          box-shadow:0 10px 28px rgba(100,60,20,0.1);
+        }
+        .rm-badge {
+          display:inline-flex;
+          align-items:center;
+          padding:3px 10px;
+          border-radius:20px;
+          font-size:11px;
+          font-weight:500;
+        }
+        .rm-btn {
+          flex:1;
+          padding:9px 0;
+          border-radius:9px;
+          font-size:13px;
+          font-weight:500;
+          cursor:pointer;
+          border:none;
+          font-family:'DM Sans',sans-serif;
+          transition:opacity .15s;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          gap:5px;
+        }
+        .rm-btn:hover { opacity:.85; }
+      `}</style>
 
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 16,
+          border: "0.5px solid rgba(239,68,68,0.2)",
+          borderLeft: "4px solid #EF4444",
+          padding: "20px 24px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 12,
+          marginBottom: "1.5rem",
+        }}
+      >
         <div>
-          <h1 className="text-3xl font-bold text-main-blue">
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 600, color: "#B91C1C" }}>
             Gestión del Menú
           </h1>
-          <p className="text-gray-500 text-sm">
+          <p style={{ fontSize: 13, color: "#991B1B", marginTop: 3 }}>
             Administra los platillos, bebidas, categorías y precios de tu restaurante
           </p>
         </div>
 
         <button
-          className="bg-main-blue px-4 py-2 rounded text-white hover:opacity-90 transition font-semibold shadow-md"
           onClick={() => {
             setSelectedProduct(null);
             setOpenModal(true);
+          }}
+          style={{
+            background: "linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)",
+            color: "#fff",
+            border: "none",
+            borderRadius: 10,
+            padding: "9px 18px",
+            fontSize: 13,
+            fontWeight: 500,
+            cursor: "pointer",
+            fontFamily: "'DM Sans', sans-serif",
+            whiteSpace: "nowrap",
           }}
         >
           + Nuevo Producto
@@ -73,60 +125,52 @@ export const Products = () => {
 
       {/* GRID */}
       {products.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-xl border border-dashed border-gray-300">
-          <p className="text-gray-500">No hay productos registrados en el menú.</p>
+        <div style={{ textAlign: "center", padding: "3rem", background: "#fff", borderRadius: 16, border: "1px dashed #FCA5A5" }}>
+          <p style={{ color: "#991B1B" }}>No hay productos registrados en el menú.</p>
         </div>
       ) : (
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16 }}>
           {products.map((product) => (
-            <div
-              key={product._id}
-              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:scale-[1.02] flex flex-col justify-between"
-            >
-              {/* CONTENIDO */}
-              <div className="p-5 flex-1">
-                
+            <div key={product._id} className="rm-card">
+              <div style={{ padding: "14px 16px 16px" }}>
                 {/* CATEGORÍA Y ESTADO */}
-                <div className="flex justify-between items-start gap-2 mb-3">
-                  <span className="px-3 py-1 text-xs rounded-full font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 5, marginBottom: 8, flexWrap: "wrap" }}>
+                  <span className="rm-badge" style={{ background: "#FEE2E2", color: "#B91C1C" }}>
                     📂 {product.categoria || "General"}
                   </span>
-                  <span className={`px-2 py-0.5 text-xs font-bold rounded ${
-                    product.isActive !== false 
-                      ? "bg-green-100 text-green-700" 
-                      : "bg-red-100 text-red-700"
-                  }`}>
+                  <span className="rm-badge" style={statusStyle(product.isActive)}>
                     {product.isActive !== false ? "Activo" : "Inactivo"}
                   </span>
                 </div>
 
-                {/* NOMBRE DEL PRODUCTO */}
-                <h2 className="text-xl font-bold text-main-blue mb-1 line-clamp-1">
+                {/* NOMBRE */}
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 16, fontWeight: 500, color: "#B91C1C", marginBottom: 8 }}>
                   {product.nombre}
                 </h2>
 
                 {/* DESCRIPCIÓN */}
-                <p className="text-sm text-gray-500 mb-4 line-clamp-2 min-h-[40px]">
+                <p style={{ fontSize: 12, color: "#6B7280", marginBottom: 8, minHeight: "40px" }}>
                   {product.descripcion || "Sin descripción"}
                 </p>
 
-                {/* BADGE DE PRECIO */}
-                <div className="flex gap-2 mt-3 flex-wrap">
-                  <span className="px-3 py-1 text-xs rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 font-bold">
+                {/* PRECIO */}
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+                  <span className="rm-badge" style={{ background: "#FEE2E2", color: "#B91C1C" }}>
                     💰 Precio: Q{Number(product.precio).toFixed(2)}
                   </span>
                 </div>
 
-                {/* INFO ADICIONAL */}
-                <p className="text-xs text-gray-400 mt-4 truncate">
+                {/* ID */}
+                <p style={{ fontSize: 10, color: "#6B7280", marginTop: 6, overflow: "hidden", textOverflow: "ellipsis" }}>
                   ID: {product._id}
                 </p>
               </div>
 
               {/* BOTONES */}
-              <div className="px-5 pb-5 pt-2 border-t border-gray-50 flex gap-3 bg-gray-50/50">
+              <div style={{ display: "flex", gap: 8, padding: "10px 16px", borderTop: "1px solid rgba(0,0,0,0.05)" }}>
                 <button
-                  className="flex-1 py-2 rounded-lg bg-main-blue text-white font-medium hover:opacity-90 transition text-sm shadow-sm"
+                  className="rm-btn"
+                  style={{ background: "#FEE2E2", color: "#B91C1C" }}
                   onClick={() => {
                     setSelectedProduct(product);
                     setOpenModal(true);
@@ -136,11 +180,12 @@ export const Products = () => {
                 </button>
 
                 <button
-                  className="flex-1 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition text-sm shadow-sm"
+                  className="rm-btn"
+                  style={{ background: "#FECACA", color: "#A32D2D" }}
                   onClick={() =>
                     showConfirmToast({
-                      title: "Desactivar producto",
-                      message: `¿Estás seguro de desactivar el producto "${product.nombre}"?`,
+                      title: "Eliminar producto",
+                      message: `¿Estás seguro de eliminar el producto "${product.nombre}"?`,
                       onConfirm: () => deleteProduct(product._id),
                     })
                   }

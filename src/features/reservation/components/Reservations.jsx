@@ -31,6 +31,20 @@ const reservations = [
   },
 ];
 
+// Función para obtener el estilo de estado según tipo
+const estadoStyle = (estado) => {
+  switch (estado) {
+    case "Activa":
+      return "bg-green-100 text-green-700";
+    case "Finalizada":
+      return "bg-gray-100 text-gray-700";
+    case "Cancelada":
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-gray-100 text-gray-700";
+  }
+};
+
 export const Reservations = () => {
   return (
     <section className="space-y-6">
@@ -47,7 +61,7 @@ export const Reservations = () => {
         {reservations.map((reservation) => (
           <article
             key={reservation.id}
-            className="bg-[#FFF8F0]/90 rounded-3xl border border-[#C00000]/10 p-6 shadow-sm hover:-translate-y-0.5 transition"
+            className="bg-[#FFF8F0]/90 rounded-3xl border border-[#C00000]/10 p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
           >
             <div className="flex items-start justify-between gap-3 mb-4">
               <div>
@@ -56,13 +70,19 @@ export const Reservations = () => {
                   Mesa {reservation.mesa} · {reservation.cantidadPersonas} personas
                 </p>
               </div>
-              <span className="rounded-full bg-[#FFE9D3] px-3 py-1 text-xs font-semibold text-[#7F3C09]">
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-semibold ${estadoStyle(reservation.estado)}`}
+              >
                 {reservation.estado}
               </span>
             </div>
             <p className="text-sm text-[#2C1506]/75 mb-4">{reservation.descripcion}</p>
             <div className="grid gap-2 text-sm text-[#2C1506]/80">
-              <div>Fecha: {new Date(reservation.fecha).toLocaleDateString()}</div>
+              <div>Fecha: {new Date(reservation.fecha).toLocaleDateString("es-ES", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })}</div>
               <div>Hora: {reservation.hora}</div>
             </div>
           </article>

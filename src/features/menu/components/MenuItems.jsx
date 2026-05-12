@@ -119,6 +119,11 @@ export const MenuItems = () => {
                   </span>
                 </div>
 
+                {/* ID DE DISEÑO */}
+                <p className="text-xs text-gray-400 mt-2 truncate">
+                  ID de diseño: {menuItem.idDiseno || menuItem._id}
+                </p>
+
                 <p className="text-sm text-gray-500 mt-4 line-clamp-3">
                   {menuItem.description || "Sin descripción"}
                 </p>
