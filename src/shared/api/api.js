@@ -1,15 +1,18 @@
 import axios from "axios";
 import { useAuthStore } from "../../features/auth/store/authStore.js";
 
+// Fallbacks seguros para desarrollo si no se configuran las vars de entorno
+const DEFAULT_AUTH_BASE = import.meta.env.VITE_AUTH_URL ?? import.meta.env.VITE_AUTH_API_URL ?? "http://localhost:5277/api/v1";
+const DEFAULT_ADMIN_BASE = import.meta.env.VITE_ADMIN_URL ?? DEFAULT_AUTH_BASE;
 
 const axiosAuth = axios.create({
-    baseURL: import.meta.env.VITE_AUTH_URL,
-    timeout: 8000,
+  baseURL: DEFAULT_AUTH_BASE,
+  timeout: 8000,
 });
 
 const axiosAdmin = axios.create({
-    baseURL: import.meta.env.VITE_ADMIN_URL,
-    timeout: 80000,
+  baseURL: DEFAULT_ADMIN_BASE,
+  timeout: 80000,
 });
 
 axiosAuth.interceptors.request.use( (config)=>{
@@ -116,5 +119,5 @@ axiosAuth.interceptors.response.use((res) => res, handleRefreshToken);
 axiosAdmin.interceptors.response.use((res) => res, handleRefreshToken);
  
 // ================= EXPORT AXIOS =================
-export { axiosAuth, axiosAdmin };
+export { axiosAuth, axiosAdmin, DEFAULT_ADMIN_BASE };
 export { handleRefreshToken };

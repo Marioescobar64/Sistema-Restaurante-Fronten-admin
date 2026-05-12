@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useAuthStore } from "../store/authStore.js";
 
 export const LoginForm = ({ onForgot }) => {
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -19,41 +21,16 @@ export const LoginForm = ({ onForgot }) => {
 
     setLoading(true);
 
-    try {
-      const authUrl = import.meta.env.VITE_AUTH_API_URL ?? "http://localhost:5277/api/v1/auth/login";
-      const response = await axios.post(authUrl, {
-        emailOrUsername: emailOrUsername.trim(),
-        password: password.trim(),
-      });
+    const result = await login({
+      emailOrUsername: emailOrUsername.trim(),
+      password: password.trim(),
+    });
 
-      console.log("DATA COMPLETA:", response.data);
-      console.log("ROLE:", response.data?.userDetails?.role);
+    setLoading(false);
 
-      const data = response.data;
-      const role = data?.userDetails?.role ?? "";
-      const isAdmin = role.toUpperCase().includes("ADMIN");
-
-      if (!data?.success) {
-        toast.error(data?.message || "Inicio de sesión falló.");
-        return;
-      }
-
-      if (!isAdmin) {
-        toast.error("Acceso restringido: solo administradores pueden ingresar al dashboard.");
-        return;
-      }
-
-      localStorage.setItem("authToken", data.token ?? "");
-      localStorage.setItem("userRole", role);
-      localStorage.setItem("userName", data?.userDetails?.username ?? "Administrador");
-
-      toast.success("Bienvenido administrador. Redirigiendo al dashboard...");
+    if (result.success) {
+      toast.success("Bienvenido administrador. Redirigiendo...");
       navigate("/dashboard", { replace: true });
-    } catch (error) {
-      const message = error?.response?.data?.message || error?.message || "Error al iniciar sesión.";
-      toast.error(message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -62,7 +39,6 @@ export const LoginForm = ({ onForgot }) => {
       onSubmit={handleSubmit}
       className="space-y-6 bg-white/95 backdrop-blur-md p-7 rounded-2xl border border-[#C00000]/20 shadow-lg transition-all duration-300"
     >
-
       {/* HEADER */}
       <div className="text-center">
         <h2 className="text-xl font-semibold text-[#C00000]">Bienvenido</h2>
@@ -126,7 +102,6 @@ export const LoginForm = ({ onForgot }) => {
           ¿Olvidaste tu contraseña?
         </button>
       </p>
-
     </form>
   );
 };

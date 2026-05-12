@@ -11,15 +11,17 @@ import { Maintenance } from "../../features/maintenance/components/Maintenance";
 import { Cart } from "../../features/cart/components/Cart";
 // import { Administration } from "../../features/administration/components/Administration";
 
+import { useAuthStore } from "../../features/auth/store/authStore";
+
 const RequireAdmin = ({ children }) => {
-  const token = localStorage.getItem("authToken");
-  const role = localStorage.getItem("userRole") ?? "";
+  const token = useAuthStore((s) => s.token);
+  const role = useAuthStore((s) => s.user?.role ?? "");
 
   // Sin token = no autenticado
   if (!token) return <Navigate to="/" replace />;
 
   // Con token pero sin rol admin
-  const isAdmin = role.toUpperCase().includes("ADMIN");
+  const isAdmin = (role || "").toUpperCase().includes("ADMIN");
   if (!isAdmin) return <Navigate to="/" replace />;
 
   return children;

@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuthStore } from "../../../features/auth/store/authStore";
 
 export const Sidebar = () => {
   const navigate = useNavigate();
@@ -18,9 +19,9 @@ export const Sidebar = () => {
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("userName");
+    // Use the central auth store logout to keep state consistent
+    const logout = useAuthStore.getState().logout;
+    if (typeof logout === "function") logout();
     navigate("/");
   };
 
