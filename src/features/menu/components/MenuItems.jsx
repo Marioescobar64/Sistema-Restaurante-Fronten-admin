@@ -41,7 +41,7 @@ export const MenuItems = () => {
   const handleDeactivate = (menuItem) => {
     const confirmOptions = {
       title: "Desactivar platillo",
-      message: `¿Desactivar platillo \"${menuItem.saucerName}\"?`,
+      message: `¿Desactivar platillo "${menuItem.saucerName}"?`,
       onConfirm: () => deactivateMenuItem(menuItem._id),
     };
 

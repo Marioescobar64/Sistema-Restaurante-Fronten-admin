@@ -19,6 +19,13 @@ const statusStyle = (status) => {
   return { background: "#FCEBEB", color: "#A32D2D" };
 };
 
+// ✅ Helper para construir URL correcta de Cloudinary
+const getPhotoUrl = (photo) => {
+  if (!photo) return null;
+  if (photo.startsWith("http")) return photo;
+  return `https://res.cloudinary.com/dog2q2ise/image/upload/${photo}`;
+};
+
 export const Maintenance = () => {
   const {
     maintenances = [],
@@ -184,30 +191,30 @@ export const Maintenance = () => {
       </div>
 
       <div
-  style={{
-    background: "#fff",
-    borderRadius: 16,
-    border: "0.5px solid rgba(239,68,68,0.2)",
-    borderLeft: "4px solid #EF4444",
-    padding: "16px 20px",
-    marginBottom: "1rem",
-  }}
->
-  <h2
-    style={{
-      fontFamily: "'Playfair Display', serif",
-      fontSize: 20,
-      fontWeight: 600,
-      color: "#7F1D1D",
-      marginBottom: 4,
-    }}
-  >
-    Tarjetas de mesa
-  </h2>
-  <p style={{ fontSize: 13, color: "#B91C1C", margin: 0 }}>
-    Mesas: Disponibles,Ocupadas,Reservadas y en Mantenimiento
-  </p>
-</div>
+        style={{
+          background: "#fff",
+          borderRadius: 16,
+          border: "0.5px solid rgba(239,68,68,0.2)",
+          borderLeft: "4px solid #EF4444",
+          padding: "16px 20px",
+          marginBottom: "1rem",
+        }}
+      >
+        <h2
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: 20,
+            fontWeight: 600,
+            color: "#7F1D1D",
+            marginBottom: 4,
+          }}
+        >
+          Tarjetas de mesa
+        </h2>
+        <p style={{ fontSize: 13, color: "#B91C1C", margin: 0 }}>
+          Mesas: Disponibles, Ocupadas, Reservadas y en Mantenimiento
+        </p>
+      </div>
 
       {/* GRID */}
       <div
@@ -219,6 +226,7 @@ export const Maintenance = () => {
       >
         {maintenances.map((item) => (
           <div key={item._id} className="rm-card">
+            {/* IMAGEN */}
             <div
               style={{
                 height: 140,
@@ -229,13 +237,18 @@ export const Maintenance = () => {
                 overflow: "hidden",
               }}
             >
-              <img
-                src={`https://res.cloudinary.com/dxsl6ww6y/image/upload/v1777998302/kinalSport/${item.photo}`}
-                alt={`Mesa ${item.tableNumber}`}
-                style={{ maxHeight: "100%", objectFit: "contain" }}
-              />
+              {getPhotoUrl(item.photo) ? (
+                <img
+                  src={getPhotoUrl(item.photo)}
+                  alt={`Mesa ${item.tableNumber}`}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              ) : (
+                <span style={{ fontSize: 32 }}>🪑</span>
+              )}
             </div>
 
+            {/* INFO */}
             <div style={{ padding: "14px 16px 16px" }}>
               <h2
                 style={{

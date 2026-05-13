@@ -5,6 +5,12 @@ import { Spinner } from "@material-tailwind/react";
 import { useSaveMaintenance } from "../../administration/hooks/useSaveMaintenance";
 import { showSuccess, showError } from "../../../shared/utils/toast.js";
 
+const getPhotoUrl = (photo) => {
+  if (!photo) return null;
+  if (photo.startsWith('http')) return photo;
+  return `https://res.cloudinary.com/dog2q2ise/image/upload/${photo}`;
+};
+
 export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
   const {
     register,
@@ -30,9 +36,8 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
         status: maintenance.status,
       });
 
-      setPreview(
-        `https://res.cloudinary.com/dxsl6ww6y/image/upload/v1777998302/kinalSport/${maintenance.photo}`
-      );
+      setPreview(getPhotoUrl(maintenance.photo));
+
     } else {
       reset({
         tableNumber: "",

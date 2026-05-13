@@ -50,11 +50,11 @@ export const deactivateOrder = async (id, status) => {
    return await axiosAdmin.put(`/order/${id}`, { estado: status }); };
 
 // Reservaciones
-export const getReservations = async () => api.get("/reservation");
-export const getReservationById = async (id) => api.get(`/reservation/${id}`);
-export const createReservation = async (data) => api.post("/reservation", data);
-export const updateReservation = async (id, data) => api.put(`/reservation/${id}`, data);
-export const changeReservationStatus = async (id, status) => api.put(`/reservation/${id}`, { estado: status });
+export const getReservations = async () => axiosAdmin.get("/reservation");
+export const getReservationById = async (id) => axiosAdmin.get(`/reservation/${id}`);
+export const createReservation = async (data) => axiosAdmin.post("/reservation", data);
+export const updateReservation = async (id, data) => axiosAdmin.put(`/reservation/${id}`, data);
+export const changeReservationStatus = async (id, status) => axiosAdmin.put(`/reservation/${id}`, { estado: status });
 
 // Mesas
 export const getTables = async () => {
@@ -71,11 +71,11 @@ export const deactivateTable = async (id, status) => {
 
 
 // Eventos
-export const getEvents = async () => api.get("/event");
-export const getEventById = async (id) => api.get(`/event/${id}`);
-export const createEvent = async (data) => api.post("/event", data);
-export const updateEvent = async (id, data) => api.put(`/event/${id}`, data);
-export const changeEventStatus = async (id, status) => api.put(`/event/${id}`, { isActive: status });
+export const getEvents = async () => axiosAdmin.get("/event");
+export const getEventById = async (id) => axiosAdmin.get(`/event/${id}`);
+export const createEvent = async (data) => axiosAdmin.post("/event", data);
+export const updateEvent = async (id, data) => axiosAdmin.put(`/event/${id}`, data);
+export const changeEventStatus = async (id, status) => axiosAdmin.put(`/event/${id}`, { isActive: status });
 
 // Mantenimiento
 export const getMaintenanceRecords = async () => {
@@ -94,10 +94,10 @@ export const deleteMaintenanceRecord = async (id) => {
   return await axiosAdmin.put(`/maintenance/${id}/deactivate`, { isActive: false });
 };
 // Carritos
-export const getCarts = async () => api.get("/cart");
-export const getCartById = async (id) => api.get(`/cart/${id}`);
-export const createCart = async (data) => api.post("/cart", data);
-export const updateCart = async (id, data) => api.put(`/cart/${id}`, data);
+export const getCarts = async () => axiosAdmin.get("/cart");
+export const getCartById = async (id) => axiosAdmin.get(`/cart/${id}`);
+export const createCart = async (data) => axiosAdmin.post("/cart", data);
+export const updateCart = async (id, data) => axiosAdmin.put(`/cart/${id}`, data);
 
 // Administración general
 export const getAdministration = async () => api.get("/administration");
