@@ -5,6 +5,13 @@ import { Spinner } from "@material-tailwind/react";
 import { useSaveMenu } from "../../administration/hooks/useSaveMenu";
 import { showSuccess, showError } from "../../../shared/utils/toast.js";
 
+// ✅ Helper corregido
+const getPhotoUrl = (photo) => {
+  if (!photo) return null;
+  if (photo.startsWith("http")) return photo;
+  return `https://res.cloudinary.com/dog2q2ise/image/upload/${photo}`;
+};
+
 export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
   const {
     register,
@@ -19,7 +26,6 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
 
   const [preview, setPreview] = useState(null);
 
-  // 🔹 Cargar datos al editar
   useEffect(() => {
     if (isOpen) {
       if (menuItem) {
@@ -29,10 +35,8 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
           price: menuItem.price,
           description: menuItem.description,
         });
-
-        setPreview(
-          `https://res.cloudinary.com/dxsl6ww6y/image/upload/v1777998302/kinalSport/${menuItem.photo}`
-        );
+        // ✅ Usa el helper en vez de construir la URL manualmente
+        setPreview(getPhotoUrl(menuItem.photo));
       } else {
         reset({
           saucerName: "",
@@ -46,7 +50,6 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
     }
   }, [isOpen, menuItem, reset]);
 
-  // 🔹 Preview imagen
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "photo" && value.photo && value.photo.length > 0) {
@@ -56,7 +59,6 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  // 🔹 Submit
   const onSubmit = async (data) => {
     try {
       await saveMenu(data, menuItem?._id);
@@ -102,12 +104,11 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
           onSubmit={handleSubmit(onSubmit)}
           className="p-4 sm:p-6 space-y-5 overflow-y-auto"
         >
-
           {/* PREVIEW */}
           <div className="flex justify-center">
             <div className="w-28 h-28 rounded-2xl bg-gray-100 border flex items-center justify-center overflow-hidden">
               {preview ? (
-                <img src={preview} className="w-full h-full object-cover" />
+                <img src={preview} className="w-full h-full object-cover" alt="preview" />
               ) : (
                 <span className="text-gray-400 text-sm">Sin imagen</span>
               )}
@@ -117,26 +118,20 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
           {/* INPUTS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-            {/* Nombre del platillo */}
             <div className="flex flex-col md:col-span-2">
               <label className="text-sm font-semibold">Nombre del platillo</label>
               <input
                 type="text"
-                {...register("saucerName", {
-                  required: "El nombre es obligatorio",
-                })}
+                {...register("saucerName", { required: "El nombre es obligatorio" })}
                 className="input"
               />
               {errors.saucerName && <p className="text-red-500 text-xs">{errors.saucerName.message}</p>}
             </div>
 
-            {/* Categoría */}
             <div className="flex flex-col">
               <label className="text-sm font-semibold">Categoría</label>
               <select
-                {...register("categoryType", {
-                  required: "La categoría es obligatoria",
-                })}
+                {...register("categoryType", { required: "La categoría es obligatoria" })}
                 className="input"
               >
                 <option value="Platillo-Familiar">Platillo Familiar</option>
@@ -147,7 +142,6 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
               {errors.categoryType && <p className="text-red-500 text-xs">{errors.categoryType.message}</p>}
             </div>
 
-            {/* Precio */}
             <div className="flex flex-col">
               <label className="text-sm font-semibold">Precio</label>
               <input
@@ -162,7 +156,6 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
               {errors.price && <p className="text-red-500 text-xs">{errors.price.message}</p>}
             </div>
 
-            {/* Descripción */}
             <div className="flex flex-col md:col-span-2">
               <label className="text-sm font-semibold">Descripción</label>
               <textarea
@@ -175,7 +168,6 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
               {errors.description && <p className="text-red-500 text-xs">{errors.description.message}</p>}
             </div>
 
-            {/* Imagen */}
             <div className="flex flex-col md:col-span-2">
               <label className="text-sm font-semibold">Imagen</label>
               <input
@@ -187,7 +179,6 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
             </div>
           </div>
 
-          {/* ID DE DISEÑO */}
           {menuItem && (
             <p className="text-xs text-gray-400 mt-2 truncate">
               ID de diseño: {menuItem.idDiseno || menuItem._id}
