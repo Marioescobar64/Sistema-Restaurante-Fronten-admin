@@ -4,10 +4,12 @@ import { React } from "react";
 export function showConfirmToast({title, message, onConfirm}){
  
     toast.custom((t) => (
-        <div className="bg-white p-6 rounded-xl w-96 text-center shadow-lg border border-gray-200">
+        /* CAMBIO RESPONSIVO: Se cambió 'w-96' por 'w-full max-w-md mx-4' para que se adapte perfectamente a celulares */
+        <div className="bg-white p-6 rounded-xl w-full max-w-md mx-4 text-center shadow-lg border border-gray-200 box-border">
             <h2 className="text-xl font-bold mb-2">{title}</h2>
-            <p className="mb-4">{message}</p>
-           
+            <p className="mb-4 text-sm sm:text-base">{message}</p>
+            
+            {/* Contenedor de botones flexible */}
             <div className="flex justify-center gap-4 mt-4">
  
             <button
@@ -26,7 +28,7 @@ export function showConfirmToast({title, message, onConfirm}){
             >
                 Confirmar
             </button>
-           
+            
             </div>
         </div>
     ));

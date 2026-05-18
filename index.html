@@ -6,8 +6,8 @@
     <!-- FAVICON -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- RESPONSIVE -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- RESPONSIVE & MOBILE OPTIMIZATION (Previene zooms automáticos molestos al usar inputs) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
 
     <!-- SEO BÁSICO -->
     <meta name="description" content="Panel administrativo de Papa Luigi para gestión de pedidos, usuarios y menú." />
@@ -15,12 +15,21 @@
     <!-- TÍTULO -->
     <title>Papa Luigi | Panel Administrativo</title>
 
-    <!-- COLOR DEL NAVEGADOR (mobile) -->
-    <meta name="theme-color" content="#7F3C09" />
+    <!-- COLOR DEL NAVEGADOR (Mobile) -->
+    <meta name="theme-color" content="#C00000" /> <!-- Cambiado al rojo dominante de tu Navbar actual -->
+
+    <!-- OPTIMIZACIONES EXTRAS PARA WEB APP (Modo pantalla completa al guardar en inicio) -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Papa Luigi Admin" />
+    
+    <!-- Evita que los números de teléfono se formateen automáticamente como enlaces en iOS -->
+    <meta name="format-detection" content="telephone=no" />
   </head>
 
-  <body class="bg-[#F3F8F2]">
-    <div id="root"></div>
+  <body class="bg-[#F3F8F2] select-none antialiased overflow-x-hidden">
+    <div id="root" class="min-h-screen w-full flex flex-col"></div>
 
     <!-- APP -->
     <script type="module" src="/src/app/main.jsx"></script>

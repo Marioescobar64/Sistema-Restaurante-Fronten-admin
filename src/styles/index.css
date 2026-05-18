@@ -48,17 +48,51 @@
   border-color: var(--primary);
 }
 
-/* Botón principal */
+/* Botones con comportamiento táctil mejorado */
 .btn-primary {
   background: var(--primary);
   color: white;
   border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  transition: 0.2s ease;
+  padding: 0.625rem 1.25rem; /* Padding optimizado para interacción táctil */
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-primary:hover {
   opacity: 0.9;
+}
+
+.btn-primary:active {
+  transform: scale(0.98); /* Feedback de presión en móviles */
+}
+
+/* 🔹 CLASE INPUT GLOBAL REUTILIZABLE (Para tus formularios/modales) */
+.input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  padding: 0.625rem 0.875rem; /* Altura ideal de 42px para evitar errores de dedo */
+  font-size: 0.875rem; /* Evita el zoom automático molesto en iOS al enfocar */
+  color: var(--secondary);
+  background-color: #ffffff;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.input:focus {
+  border-color: transparent;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+.input::placeholder {
+  color: #9ca3af;
 }
 
 /* =========================
@@ -67,7 +101,7 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(-4px); /* Suavizado para pantallas móviles */
   }
   to {
     opacity: 1;
@@ -80,8 +114,8 @@
 }
 
 /* =========================
-   SIDEBAR EFECTO ACTIVO
-========================= */
+   SIDEBAR EFECTO ACTIVO (Híbrido Escritorio/Móvil) */
+/* ========================= */
 .sidebar-underline {
   position: relative;
 }
@@ -89,18 +123,28 @@
 .sidebar-underline.active::after {
   content: "";
   position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 6px;
-  height: 4px;
   border-radius: 6px;
-
   background: linear-gradient(
     90deg,
     rgba(127, 60, 9, 0.2) 0%,
     var(--primary) 50%,
     rgba(127, 60, 9, 0.2) 100%
   );
-
   filter: blur(1.5px);
+
+  /* Comportamiento por defecto en Escritorio (Línea decorativa inferior) */
+  left: 16px;
+  right: 16px;
+  bottom: 6px;
+  height: 4px;
+}
+
+/* Adaptación cuando el Sidebar pasa a modo barra horizontal en pantallas móviles */
+@media (max-width: 767px) {
+  .sidebar-underline.active::after {
+    left: 8px;
+    right: 8px;
+    bottom: 2px;
+    height: 3px;
+  }
 }

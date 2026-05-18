@@ -35,8 +35,8 @@ function App() {
         }}
       />
 
-      {/* CONTENIDO */}
-      <div className="animate-fadeIn">
+      {/* CONTENIDO RESPONSIVO (Se añadieron márgenes fluidos para pantallas móviles) */}
+      <div className="animate-fadeIn px-4 sm:px-0 w-full max-w-full overflow-x-hidden">
         <AppRoutes />
       </div>
 

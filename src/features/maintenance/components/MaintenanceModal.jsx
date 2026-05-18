@@ -81,21 +81,21 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
 
   return (
     <div
-      className="fixed inset-0 flex justify-center items-center z-50 p-4"
+      className="fixed inset-0 flex justify-center items-center z-50 p-3 sm:p-4"
       style={{
         background: "rgba(15, 15, 15, 0.55)",
         backdropFilter: "blur(8px)",
       }}
     >
       <div
-        className="w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl"
+        className="w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl rm-modal-container"
         style={{
           background: "#FFFFFF",
           fontFamily: "'DM Sans', sans-serif",
           animation: "fadeIn .2s ease-out",
         }}
       >
-        {/* ANIMACIÓN */}
+        {/* ACTUALIZACIONES DE RESPONSIVO AGREGADAS AQUÍ */}
         <style>{`
           @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.96); }
@@ -137,11 +137,47 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
             font-size: 11px;
             margin-top: 3px;
           }
+
+          /* --- REGLAS RESPONSIVAS PARA PANTALLAS CHICAS (MÓVILES) --- */
+          @media (max-width: 640px) {
+            .rm-modal-container {
+              max-height: 92vh; /* Evita que el modal se salga de la pantalla verticalmente */
+              display: flex;
+              flex-direction: column;
+            }
+            
+            .rm-modal-header {
+              padding: 16px !important;
+            }
+            
+            .rm-modal-body {
+              padding: 16px !important;
+              overflow-y: auto; /* Permite scroll interno si el teléfono es muy pequeño */
+              max-height: calc(92vh - 140px);
+            }
+
+            .rm-grid-inputs {
+              grid-template-columns: 1fr !important; /* Coloca un input debajo del otro */
+              gap: 12px !important;
+            }
+
+            .rm-buttons-container {
+              flex-direction: column-reverse; /* El botón principal queda arriba y cancelar abajo */
+              gap: 8px !important;
+              width: 100%;
+            }
+
+            .rm-buttons-container button {
+              width: 100%; /* Botones a lo ancho total de la pantalla */
+              justify-content: center;
+              padding: 12px !important;
+            }
+          }
         `}</style>
 
         {/* HEADER */}
         <div
-          className="p-6"
+          className="p-6 rm-modal-header"
           style={{
             background: "linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)",
           }}
@@ -153,6 +189,7 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
                 width: 40,
                 height: 40,
                 background: "rgba(255,255,255,0.18)",
+                flexShrink: 0,
               }}
             >
               <span style={{ fontSize: 20 }}>🪑</span>
@@ -165,6 +202,7 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
                   fontSize: 20,
                   fontWeight: 600,
                   color: "#fff",
+                  margin: 0,
                 }}
               >
                 {maintenance ? "Editar Mesa" : "Nueva Mesa"}
@@ -174,6 +212,7 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
                 style={{
                   fontSize: 12,
                   color: "rgba(255,255,255,0.8)",
+                  margin: 0,
                 }}
               >
                 Completa la información de la mesa
@@ -183,7 +222,7 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
         </div>
 
         {/* BODY */}
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5 rm-modal-body">
           {/* PREVIEW */}
           <div className="flex justify-center">
             <div
@@ -194,6 +233,7 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
                 borderRadius: 14,
                 background: "#F5EDE0",
                 border: "1.5px dashed rgba(239,68,68,0.45)",
+                flexShrink: 0,
               }}
             >
               {preview ? (
@@ -214,7 +254,7 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
           </div>
 
           {/* INPUTS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 rm-grid-inputs">
             <div>
               <label className="rm-label">★ Número de mesa</label>
               <input
@@ -273,7 +313,7 @@ export const MaintenanceModal = ({ isOpen, onClose, maintenance }) => {
 
           {/* BOTONES */}
           <div
-            className="flex justify-end gap-3 pt-4"
+            className="flex justify-end gap-3 pt-4 rm-buttons-container"
             style={{ borderTop: "0.5px solid rgba(127,29,29,0.15)" }}
           >
             <button

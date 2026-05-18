@@ -19,7 +19,8 @@ export const AuthPage = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-4"
+      /* CAMBIO RESPONSIVO: Se cambió 'min-h-screen' por un flujo con scroll vertical preventivo 'min-h-screen py-6 px-4' */
+      className="min-h-screen flex items-center justify-center py-6 px-4 box-border overflow-y-auto"
       style={{
         backgroundImage: `url(${loginfondo})`,
         backgroundSize: "cover",
@@ -27,24 +28,28 @@ export const AuthPage = () => {
       }}
     >
       {/* CARD */}
-      <div className="w-full max-w-md bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-[#C00000]/20 p-8 md:p-10 transition-all duration-300">
+      {/* CAMBIO RESPONSIVO: Se ajustaron los paddings fluidos 'p-5 sm:p-8 md:p-10' para evitar colapsar los elementos internos en pantallas compactas*/}
+      <div className="w-full max-w-md bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-[#C00000]/20 p-5 sm:p-8 md:p-10 transition-all duration-300 box-border">
         
         {/* LOGO */}
-        <div className="flex justify-center mb-5">
+        {/* CAMBIO RESPONSIVO: 'mb-4 sm:mb-5' y escala en la altura de la imagen para pantallas chicas */}
+        <div className="flex justify-center mb-4 sm:mb-5">
           <img
             src={logo}
             alt="Logo Restaurante"
-            className="h-16 w-auto drop-shadow-md"
+            className="h-14 sm:h-16 w-auto drop-shadow-md object-contain"
           />
         </div>
 
         {/* HEADER */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl lg:text-3xl font-bold text-[#C00000] mb-2">
+        {/* CAMBIO RESPONSIVO: 'mb-5 sm:mb-6' y tamaños de texto equilibrados fluidamente */}
+        <div className="text-center mb-5 sm:mb-6">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#C00000] mb-2">
             {isForgot ? "Recuperar contraseña" : "Bienvenido"}
           </h1>
 
-          <p className="text-[#2E7D32] text-sm max-w-xs mx-auto">
+          {/* CAMBIO RESPONSIVO: 'text-xs sm:text-sm' para una lectura óptima y evitar desbordamientos de bloque */}
+          <p className="text-[#2E7D32] text-xs sm:text-sm max-w-xs mx-auto">
             {isForgot
               ? "Ingresa tu correo para recuperar tu acceso"
               : "Accede al panel administrativo del restaurante"}

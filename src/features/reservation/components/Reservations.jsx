@@ -47,43 +47,62 @@ const estadoStyle = (estado) => {
 
 export const Reservations = () => {
   return (
-    <section className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <section className="space-y-6 px-1 sm:px-0">
+      {/* HEADER RESPONSIVO */}
+      <div className="flex flex-col gap-3 text-center sm:text-left md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-[#2C1506]">Reservaciones</h1>
-          <p className="text-sm text-[#2C1506]/80 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#2C1506] m-0">
+            Reservaciones
+          </h1>
+          <p className="text-xs sm:text-sm text-[#2C1506]/80 mt-1.5 mb-0">
             Ejemplo visual de cómo se verían las reservaciones integradas.
           </p>
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {/* GRID CONFIGURADO PARA COLAPSAR EN MÓVILES */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {reservations.map((reservation) => (
           <article
             key={reservation.id}
-            className="bg-[#FFF8F0]/90 rounded-3xl border border-[#C00000]/10 p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+            className="bg-[#FFF8F0]/90 rounded-3xl border border-[#C00000]/10 p-5 sm:p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between"
           >
-            <div className="flex items-start justify-between gap-3 mb-4">
-              <div>
-                <h2 className="text-xl font-semibold text-[#2C1506]">{reservation.usuario}</h2>
-                <p className="text-sm text-[#2C1506]/80 mt-1">
-                  Mesa {reservation.mesa} · {reservation.cantidadPersonas} personas
-                </p>
+            <div>
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <div className="min-w-0">
+                  <h2 className="text-lg sm:text-xl font-semibold text-[#2C1506] truncate m-0">
+                    {reservation.usuario}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-[#2C1506]/80 mt-1 mb-0">
+                    Mesa {reservation.mesa} · {reservation.cantidadPersonas} personas
+                  </p>
+                </div>
+                <span
+                  className={`rounded-full px-2.5 py-1 text-xs font-semibold whitespace-nowrap flex-shrink-0 ${estadoStyle(
+                    reservation.estado
+                  )}`}
+                >
+                  {reservation.estado}
+                </span>
               </div>
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${estadoStyle(reservation.estado)}`}
-              >
-                {reservation.estado}
-              </span>
+              <p className="text-xs sm:text-sm text-[#2C1506]/75 mb-4 line-clamp-3">
+                {reservation.descripcion}
+              </p>
             </div>
-            <p className="text-sm text-[#2C1506]/75 mb-4">{reservation.descripcion}</p>
-            <div className="grid gap-2 text-sm text-[#2C1506]/80">
-              <div>Fecha: {new Date(reservation.fecha).toLocaleDateString("es-ES", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              })}</div>
-              <div>Hora: {reservation.hora}</div>
+
+            {/* DETALLES DE FECHA Y HORA */}
+            <div className="grid grid-cols-2 gap-2 text-xs sm:text-sm text-[#2C1506]/80 pt-3 border-t border-[#2C1506]/10">
+              <div>
+                <span className="font-medium">Fecha:</span>{" "}
+                {new Date(reservation.fecha).toLocaleDateString("es-ES", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </div>
+              <div className="text-right sm:text-left">
+                <span className="font-medium">Hora:</span> {reservation.hora}
+              </div>
             </div>
           </article>
         ))}

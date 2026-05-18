@@ -106,3 +106,58 @@ body {
   font-size: 12px;
   opacity: 0.7;
 }
+
+/* ==========================================
+   CAPA RESPONSIVA UNIVERSAL (No altera tu base)
+   ========================================== */
+
+/* 1. Asegura que el cálculo de tamaños sea exacto en todo el documento */
+*, ::before, ::after {
+  box-sizing: border-box;
+}
+
+/* 📱 Optimización para pantallas medianas y móviles pequeños (Menos de 400px) */
+@media (max-width: 400px) {
+  .login-container {
+    /* Agrega un pequeño respiro arriba y abajo si la pantalla es muy enana de alto */
+    padding: 20px 10px; 
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .login-card {
+    /* Cambiamos el ancho fijo por uno fluido para que nunca se desborde */
+    width: 100%;
+    max-width: 320px; 
+    
+    /* Reducimos ligeramente los paddings para ganar espacio interno en celulares */
+    padding: 30px 20px; 
+    
+    /* Suavizamos el efecto hover en pantallas táctiles (donde no hay mouse) */
+    transform: none !important;
+  }
+  
+  .login-card:hover {
+    transform: none !important;
+  }
+
+  /* Ajuste milimétrico de textos y botones para pantallas pequeñas */
+  .login-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .login-card input, 
+  .login-card button {
+    padding: 11px; /* Un toque más cómodo para los dedos */
+    font-size: 15px; /* Evita que iOS haga zoom automático molesto al clickear inputs */
+  }
+}
+
+/* ⚡ Ajuste extremo para dispositivos ultra-pequeños o relojes inteligentes (Menos de 280px) */
+@media (max-width: 280px) {
+  .login-card {
+    max-width: 100%;
+    padding: 20px 15px;
+  }
+}

@@ -1,13 +1,18 @@
 import { toast } from 'react-hot-toast';
 
+// Detectar si el dispositivo es móvil de forma dinámica al cargar el módulo
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+
 const baseStyle = {
-    borderRadius: '8px',
+    borderRadius: '12px', // Bordes más suaves acordes a la estética móvil actual
     fontWeight: 600,
     fontFamily: 'inherit',
-    fontSize: '1rem',
-    padding: '16px 24px',
-    boxShadow: '0 2px 16px 0 rgba(0,0,0,0.08)'
-}
+    fontSize: isMobile ? '0.875rem' : '1rem', // 14px en móvil, 16px en escritorio
+    padding: isMobile ? '12px 16px' : '16px 24px', // Dimensiones compactas en móvil
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)',
+    maxWidth: isMobile ? '90vw' : '450px', // Previene que el toast toque o desborde los bordes de la pantalla
+    margin: isMobile ? '0 auto' : 'inherit'
+};
 
 export const showSuccess = (message) =>
   toast.success(message, {
@@ -15,11 +20,11 @@ export const showSuccess = (message) =>
       ...baseStyle,
       background: "linear-gradient(90deg, #22c55e 0%, #16a34a 100%)",
       color: "#fff",
-      border: "2px solid #22c55e",
+      border: "1px solid #16a34a",
     },
     iconTheme: {
-      primary: "#22c55e",
-      secondary: "#fff",
+      primary: "#ffffff",
+      secondary: "#16a34a", // Invertido para mejor contraste visual
     },
   });
  
@@ -29,11 +34,11 @@ export const showError = (message) =>
       ...baseStyle,
       background: "linear-gradient(90deg, #ef4444 0%, #b91c1c 100%)",
       color: "#fff",
-      border: "2px solid #ef4444",
+      border: "1px solid #b91c1c",
     },
     iconTheme: {
-      primary: "#ef4444",
-      secondary: "#fff",
+      primary: "#ffffff",
+      secondary: "#b91c1c", // Invertido para mejor contraste visual
     },
   });
  
@@ -43,11 +48,10 @@ export const showInfo = (message) =>
       ...baseStyle,
       background: "linear-gradient(90deg, #0ea5e9 0%, #0369a1 100%)",
       color: "#fff",
-      border: "2px solid #0ea5e9",
+      border: "1px solid #0369a1",
     },
     iconTheme: {
-      primary: "#0ea5e9",
-      secondary: "#fff",
+      primary: "#ffffff",
+      secondary: "#0369a1", // Invertido para mejor contraste visual
     },
   });
- 

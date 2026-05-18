@@ -67,19 +67,24 @@ export const Maintenance = () => {
     <div
       style={{
         minHeight: "100vh",
-        padding: "1.5rem",
+        padding: "1rem", // Optimizado para pantallas pequeñas
         fontFamily: "'DM Sans', sans-serif",
+        boxSizing: "border-box",
       }}
     >
       <style>{FONTS}</style>
 
+      {/* REGLAS CSS RESPONSIVAS INYECTADAS DIRECTAMENTE */}
       <style>{`
+        * { box-sizing: border-box; }
+        
         .rm-card {
           background:#fff;
           border-radius:16px;
           border:0.5px solid rgba(100,60,20,0.1);
           overflow:hidden;
           transition:transform .2s, box-shadow .2s;
+          width: 100%;
         }
         .rm-card:hover {
           transform:translateY(-3px);
@@ -109,21 +114,58 @@ export const Maintenance = () => {
           gap:5px;
         }
         .rm-btn:hover { opacity:.85; }
+
+        /* Estilos Adaptables por Media Queries */
+        .rm-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-direction: row;
+          gap: 12px;
+        }
+        
+        .rm-grid-stats {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+        }
+
+        .rm-grid-cards {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 16px;
+        }
+
+        /* Optimización estricta para teléfonos móviles */
+        @media (max-width: 600px) {
+          .rm-header {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            text-align: center;
+          }
+          .rm-header button {
+            width: 100%;
+            padding: 12px !important;
+          }
+          .rm-grid-stats {
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
+          }
+          .rm-grid-cards {
+            grid-template-columns: 1fr !important;
+          }
+        }
       `}</style>
 
       {/* HEADER */}
       <div
+        className="rm-header"
         style={{
           background: "#fff",
           borderRadius: 16,
           border: "0.5px solid rgba(239,68,68,0.2)",
           borderLeft: "4px solid #EF4444",
           padding: "20px 24px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: 12,
           marginBottom: "1.5rem",
         }}
       >
@@ -134,11 +176,12 @@ export const Maintenance = () => {
               fontSize: 24,
               fontWeight: 600,
               color: "#7F1D1D",
+              margin: 0,
             }}
           >
             Mantenimiento
           </h1>
-          <p style={{ fontSize: 13, color: "#B91C1C", marginTop: 3 }}>
+          <p style={{ fontSize: 13, color: "#B91C1C", marginTop: 3, marginBottom: 0 }}>
             Gestión de mesas en mantenimiento
           </p>
         </div>
@@ -166,14 +209,7 @@ export const Maintenance = () => {
       </div>
 
       {/* STATS */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-          gap: 12,
-          marginBottom: "1.5rem",
-        }}
-      >
+      <div className="rm-grid-stats" style={{ marginBottom: "1.5rem" }}>
         <div style={cardStat("#F5EDE0")}>
           <p style={numStyle("#2C1810")}>{total}</p>
           <p style={labelStyle}>Total mesas</p>
@@ -190,6 +226,7 @@ export const Maintenance = () => {
         </div>
       </div>
 
+      {/* TÍTULO INTERMEDIO */}
       <div
         style={{
           background: "#fff",
@@ -207,6 +244,7 @@ export const Maintenance = () => {
             fontWeight: 600,
             color: "#7F1D1D",
             marginBottom: 4,
+            marginTop: 0,
           }}
         >
           Tarjetas de mesa
@@ -216,14 +254,8 @@ export const Maintenance = () => {
         </p>
       </div>
 
-      {/* GRID */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-          gap: 16,
-        }}
-      >
+      {/* GRID RESPONSIVO DE TARJETAS */}
+      <div className="rm-grid-cards">
         {maintenances.map((item) => (
           <div key={item._id} className="rm-card">
             {/* IMAGEN */}
@@ -257,6 +289,7 @@ export const Maintenance = () => {
                   fontWeight: 500,
                   color: "#7F1D1D",
                   marginBottom: 8,
+                  marginTop: 0,
                 }}
               >
                 Mesa #{item.tableNumber}
@@ -324,6 +357,7 @@ const cardStat = (bg) => ({
   border: "0.5px solid rgba(100,60,20,0.1)",
   padding: "16px 20px",
   textAlign: "center",
+  width: "100%",
 });
 
 const numStyle = (color) => ({
@@ -331,10 +365,12 @@ const numStyle = (color) => ({
   fontWeight: 500,
   color,
   lineHeight: 1,
+  margin: 0,
 });
 
 const labelStyle = {
   fontSize: 12,
   color: "#B91C1C",
   marginTop: 4,
+  marginBottom: 0,
 };
