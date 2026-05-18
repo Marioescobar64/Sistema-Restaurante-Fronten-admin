@@ -1,7 +1,7 @@
 import { Navigate, Routes, Route } from "react-router-dom";
 import { DashboardPage } from "../layouts/DashboardPage";
 import { AuthPage } from "../../features/auth/pages/AuthPage";
-import { Products } from "../../features/product/components/Products";
+import { Products } from "../../features/product/components/Product";
 import { MenuItems } from "../../features/menu/components/MenuItems";
 import { Orders } from "../../features/order/components/Orders";
 import { Reservations } from "../../features/reservation/components/Reservations";

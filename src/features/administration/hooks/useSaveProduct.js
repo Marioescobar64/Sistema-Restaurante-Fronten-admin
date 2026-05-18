@@ -1,27 +1,72 @@
-import { useProductStore } from "../../users/store/productStore"; // Tu Store de productos recién creado
+import { create } from "zustand";
+import {
+  getProducts as getProductsRequest,
+  createProduct as createProductRequest,
+  updateProduct as updateProductRequest,
+  deactivateProduct as deactivateProductRequest,
+} from "../../../shared/api";
 
-export const useSaveProduct = () => {
-  const createProduct = useProductStore((state) => state.createProduct);
-  const updateProduct = useProductStore((state) => state.updateProduct);
-
-  const saveProduct = async (data, productId = null) => {
-
-    // 1. Construir el payload final estructurado en ESPAÑOL sin fotos
-    // Aseguramos que los tipos de datos coincidan perfectamente con tu Mongoose Schema
-    const payload = {
-      nombre: (data.nombre || data.name || "").trim(),
-      descripcion: (data.descripcion || data.description || "").trim(),
-      precio: Number(data.precio || data.price || 0), // Aseguramos formato numérico
-      categoria: (data.categoria || data.category || "").trim(),
-    };
-
-    // 2. Crear o actualizar enviando el JSON plano (sin FormData ya que no hay fotos)
-    if (productId) {
-      await updateProduct(productId, payload);
-    } else {
-      await createProduct(payload);
-    }
-  };
-
-  return { saveProduct };
+const getApiErrorMessage = (error, fallbackMessage) => {
+  const data = error?.response?.data;
+  if (typeof data?.message === "string" && data.message.trim()) {
+    return data.message;
+  }
+  return fallbackMessage;
 };
+
+export const useProductStore = create((set, get) => ({
+  products: [],   
+  loading: false,
+  error: null,
+
+  getProducts: async () => {
+    try {
+      set({ loading: true, error: null });
+      const response = await getProductsRequest();
+      set({ products: response.data.data, loading: false });
+    } catch (error) {
+      set({ error: "Error al obtener productos", loading: false });
+    }
+  },
+
+  createProduct: async (formData) => {
+    try {
+      set({ loading: true, error: null });
+      await createProductRequest(formData);
+      await get().getProducts(); 
+      set({ loading: false });
+    } catch (error) {
+      const message = getApiErrorMessage(error, "Error al crear producto");
+      set({ loading: false, error: message });
+      throw new Error(message);
+    }
+  },
+
+  updateProduct: async (id, formData) => {
+    try {
+      set({ loading: true, error: null });
+      await updateProductRequest(id, formData);
+      await get().getProducts(); 
+      set({ loading: false });
+    } catch (error) {
+      const message = getApiErrorMessage(error, "Error al actualizar producto");
+      set({ loading: false, error: message });
+      throw new Error(message);
+    }
+  },
+
+  deleteProduct: async (id) => {
+    try {
+      set({ loading: true, error: null });
+      await deactivateProductRequest(id); 
+      set({
+        products: get().products.filter((p) => p._id !== id),
+        loading: false,
+      });
+    } catch (error) {
+      const message = getApiErrorMessage(error, "Error al eliminar producto");
+      set({ loading: false, error: message });
+      throw new Error(message);
+    }
+  },
+}));
