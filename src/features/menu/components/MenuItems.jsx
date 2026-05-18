@@ -9,6 +9,13 @@ import { Spinner } from "@material-tailwind/react";
 import { MenuItemsModal } from "./MenuItemsModal";
 import { showConfirmToast } from "../../auth/components/ConfirmModal";
 
+// ✅ Helper para URL de Cloudinary
+const getPhotoUrl = (photo) => {
+  if (!photo) return null;
+  if (photo.startsWith("http")) return photo;
+  return `https://res.cloudinary.com/dog2q2ise/image/upload/${photo}`;
+};
+
 export const MenuItems = () => {
   const {
     menuItems = [],
@@ -31,20 +38,12 @@ export const MenuItems = () => {
     if (error) showError(error);
   }, [error]);
 
-  const getMenuPhotoUrl = (photo) => {
-    if (!photo) return "/default-image.png";
-    return photo.startsWith("http")
-      ? photo
-      : `https://res.cloudinary.com/dxsl6ww6y/image/upload/v1777998302/kinalSport/${photo}`;
-  };
-
   const handleDeactivate = (menuItem) => {
     const confirmOptions = {
       title: "Desactivar platillo",
-      message: `¿Desactivar platillo \"${menuItem.saucerName}\"?`,
+      message: `¿Desactivar platillo "${menuItem.saucerName}"?`,
       onConfirm: () => deactivateMenuItem(menuItem._id),
     };
-
     openConfirm(confirmOptions);
     showConfirmToast(confirmOptions);
   };
@@ -87,15 +86,21 @@ export const MenuItems = () => {
               key={menuItem._id}
               className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:scale-[1.02]"
             >
-              <div className="w-full h-52 bg-gray-100 flex items-center justify-center">
-                <img
-                  src={getMenuPhotoUrl(menuItem.photo)}
-                  alt={`Platillo ${menuItem.saucerName}`}
-                  className="max-h-full max-w-full object-contain rounded-t-xl"
-                  onError={(e) => {
-                    e.target.src = "/default-image.png";
-                  }}
-                />
+              {/* IMAGEN */}
+              <div className="w-full h-52 bg-gray-100 flex items-center justify-center overflow-hidden">
+                {getPhotoUrl(menuItem.photo) ? (
+                  <img
+                    src={getPhotoUrl(menuItem.photo)}
+                    alt={`Platillo ${menuItem.saucerName}`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                      e.target.parentNode.innerHTML = '<span style="font-size:2.5rem">🍽️</span>';
+                    }}
+                  />
+                ) : (
+                  <span style={{ fontSize: "2.5rem" }}>🍽️</span>
+                )}
               </div>
 
               <div className="p-5">
@@ -118,6 +123,10 @@ export const MenuItems = () => {
                     {menuItem.isActive ? "Activo" : "Inactivo"}
                   </span>
                 </div>
+
+                <p className="text-xs text-gray-400 mt-2 truncate">
+                  ID de diseño: {menuItem.idDiseno || menuItem._id}
+                </p>
 
                 <p className="text-sm text-gray-500 mt-4 line-clamp-3">
                   {menuItem.description || "Sin descripción"}

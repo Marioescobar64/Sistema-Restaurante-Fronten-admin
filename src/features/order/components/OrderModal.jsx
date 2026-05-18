@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useOrderStore } from "../../users/store/orderStore"; // Tu store de pedidos
+import { useOrderStore } from "../../users/store/orderStore";
 import { Spinner } from "@material-tailwind/react";
-import { useSaveOrder } from "../../administration/hooks/useSaveOrder.js"; // Tu hook de guardado de pedidos
+import { useSaveOrder } from "../../administration/hooks/useSaveOrder.js";
 import { showSuccess, showError } from "../../../shared/utils/toast.js";
 
 export const OrderModal = ({ isOpen, onClose, order }) => {
@@ -16,7 +16,7 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
   const { saveOrder } = useSaveOrder();
   const loading = useOrderStore((state) => state.loading);
 
-  // 🔹 Cargar datos del pedido al editar
+  // 🔹 Cargar datos al editar
   useEffect(() => {
     if (isOpen) {
       if (order) {
@@ -25,8 +25,9 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
           descripcion: order.descripcion,
           total: order.total,
           estado: order.estado,
-          // Formateamos la fecha para el input type="date" (YYYY-MM-DD)
-          fechaPedido: order.fechaPedido ? new Date(order.fechaPedido).toISOString().split('T')[0] : "",
+          fechaPedido: order.fechaPedido
+            ? new Date(order.fechaPedido).toISOString().split("T")[0]
+            : "",
         });
       } else {
         reset({
@@ -34,13 +35,13 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
           descripcion: "",
           total: "",
           estado: "Pendiente",
-          fechaPedido: new Date().toISOString().split('T')[0], // Fecha de hoy por defecto
+          fechaPedido: new Date().toISOString().split("T")[0],
         });
       }
     }
   }, [isOpen, order, reset]);
 
-  // 🔹 Enviar datos al Hook
+  // 🔹 Submit
   const onSubmit = async (data) => {
     try {
       await saveOrder(data, order?._id);
@@ -68,15 +69,14 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
         <div
           className="p-4 sm:p-5 text-white sticky top-0 z-10"
           style={{
-            background:
-              "linear-gradient(90deg, var(--main-blue) 0%, #1956a3 100%)",
+            background: "linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)",
           }}
         >
-          <h2 className="text-xl sm:text-2xl font-bold">
+          <h2 className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>
             {order ? "Editar Pedido" : "Nuevo Pedido"}
           </h2>
           <p className="text-xs sm:text-sm opacity-80">
-            Gestiona la información detallada del pedido
+            Completa la información del pedido
           </p>
         </div>
 
@@ -85,7 +85,6 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
           onSubmit={handleSubmit(onSubmit)}
           className="p-4 sm:p-6 space-y-5 overflow-y-auto"
         >
-          {/* INPUTS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             {/* Nombre del Pedido */}
@@ -96,9 +95,9 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
                 placeholder="Ej. Almuerzo Ejecutivo, Cena Especial..."
                 {...register("nombrePedido", {
                   required: "El nombre es obligatorio",
-                  maxLength: { value: 100, message: "Máximo 100 caracteres" }
+                  maxLength: { value: 100, message: "Máximo 100 caracteres" },
                 })}
-                className="input"
+                className="input rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
               />
               {errors.nombrePedido && (
                 <p className="text-red-500 text-xs mt-1">{errors.nombrePedido.message}</p>
@@ -110,10 +109,8 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
               <label className="text-sm font-semibold">Descripción</label>
               <textarea
                 placeholder="Detalles adicionales del pedido..."
-                {...register("descripcion", {
-                  required: "La descripción es obligatoria",
-                })}
-                className="input min-h-[80px]"
+                {...register("descripcion", { required: "La descripción es obligatoria" })}
+                className="input min-h-[80px] rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
               />
               {errors.descripcion && (
                 <p className="text-red-500 text-xs mt-1">{errors.descripcion.message}</p>
@@ -131,7 +128,7 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
                   required: "El total es obligatorio",
                   min: { value: 0, message: "El total no puede ser negativo" },
                 })}
-                className="input"
+                className="input rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
               />
               {errors.total && (
                 <p className="text-red-500 text-xs mt-1">{errors.total.message}</p>
@@ -143,10 +140,8 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
               <label className="text-sm font-semibold">Fecha del Pedido</label>
               <input
                 type="date"
-                {...register("fechaPedido", {
-                  required: "La fecha es obligatoria",
-                })}
-                className="input"
+                {...register("fechaPedido", { required: "La fecha es obligatoria" })}
+                className="input rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
               />
               {errors.fechaPedido && (
                 <p className="text-red-500 text-xs mt-1">{errors.fechaPedido.message}</p>
@@ -157,10 +152,8 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
             <div className="flex flex-col md:col-span-2">
               <label className="text-sm font-semibold">Estado del Pedido</label>
               <select
-                {...register("estado", {
-                  required: "El estado es obligatorio",
-                })}
-                className="input"
+                {...register("estado", { required: "El estado es obligatorio" })}
+                className="input rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
               >
                 <option value="Pendiente">Pendiente</option>
                 <option value="En proceso">En proceso</option>
@@ -178,10 +171,7 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
           <div className="flex gap-3 pt-4 border-t justify-end">
             <button
               type="button"
-              onClick={() => {
-                reset();
-                onClose();
-              }}
+              onClick={() => { reset(); onClose(); }}
               className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
             >
               Cancelar
@@ -190,15 +180,9 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors flex items-center justify-center min-w-[120px]"
+              className="px-5 py-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded transition-colors flex items-center justify-center min-w-[120px]"
             >
-              {loading ? (
-                <Spinner className="h-4 w-4" />
-              ) : order ? (
-                "Guardar cambios"
-              ) : (
-                "Crear pedido"
-              )}
+              {loading ? <Spinner className="h-4 w-4" /> : order ? "Guardar cambios" : "Crear pedido"}
             </button>
           </div>
         </form>

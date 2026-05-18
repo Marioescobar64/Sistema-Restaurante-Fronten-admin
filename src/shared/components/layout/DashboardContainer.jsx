@@ -8,9 +8,9 @@ export const DashboardContainer = ({ children }) => {
       <div className="grid md:grid-cols-2 gap-6">
         <div className="bg-white/30 backdrop-blur-md rounded-xl p-6 border h-[220px] flex items-center justify-center text-center hover:scale-[1.02] transition">
           <p className="text-[#2C1506]">
-            La página web de Papas Luigi está diseñada para que puedas conocer fácilmente todo lo que ofrecemos.
-            En ella encontrarás nuestro menú, información sobre el restaurante, opciones para realizar pedidos y una experiencia visual atractiva que refleja nuestro estilo y sabor.
-            Nuestro objetivo es brindarte una navegación sencilla y rápida, donde puedas descubrir nuestros productos, promociones y todo lo que hace especial a Papas Luigi desde cualquier dispositivo.
+            La pagina web de Papas Luigi esta diseñada para que puedas conocer facilmente todo lo que ofrecemos.
+            En ella encontraras nuestro menu, informacion sobre el restaurante, opciones para realizar pedidos y una experiencia visual atractiva que refleja nuestro estilo y sabor.
+            Nuestro objetivo es brindarte una navegacion sencilla y rapida, donde puedas descubrir nuestros productos, promociones y todo lo que hace especial a Papas Luigi desde cualquier dispositivo.
           </p>
         </div>
 
@@ -41,7 +41,7 @@ export const DashboardContainer = ({ children }) => {
       <div className="flex gap-4 items-center flex-wrap">
         <div className="flex-1 bg-white/30 backdrop-blur-md rounded-xl p-4 border h-[80px] flex items-center justify-center">
           <p className="text-[#2C1506]">
-            Problemas? Contactanos: <strong>838392382</strong>
+            ¿Problemas? Contactanos: <strong>838392382</strong>
           </p>
         </div>
       </div>
