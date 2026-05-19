@@ -5,7 +5,6 @@ import { Spinner } from "@material-tailwind/react";
 import { useSaveMenu } from "../../administration/hooks/useSaveMenu";
 import { showSuccess, showError } from "../../../shared/utils/toast.js";
 
-// ✅ Helper corregido
 const getPhotoUrl = (photo) => {
   if (!photo) return null;
   if (photo.startsWith("http")) return photo;
@@ -19,7 +18,7 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
     reset,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues: { photo: null } });
 
   const { saveMenu } = useSaveMenu();
   const loading = useMenuStore((state) => state.loading);
@@ -30,20 +29,20 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
     if (isOpen) {
       if (menuItem) {
         reset({
-          saucerName: menuItem.saucerName,
+          saucerName:   menuItem.saucerName,
           categoryType: menuItem.categoryType,
-          price: menuItem.price,
-          description: menuItem.description,
+          price:        menuItem.price,
+          description:  menuItem.description,
+          photo:        null, // ← siempre null al abrir, nunca {}
         });
-        // ✅ Usa el helper en vez de construir la URL manualmente
         setPreview(getPhotoUrl(menuItem.photo));
       } else {
         reset({
-          saucerName: "",
+          saucerName:   "",
           categoryType: "Desayuno",
-          price: "",
-          description: "",
-          photo: null,
+          price:        "",
+          description:  "",
+          photo:        null,
         });
         setPreview(null);
       }
@@ -52,7 +51,7 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name === "photo" && value.photo && value.photo.length > 0) {
+      if (name === "photo" && value.photo instanceof FileList && value.photo.length > 0) {
         setPreview(URL.createObjectURL(value.photo[0]));
       }
     });
@@ -62,13 +61,7 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
   const onSubmit = async (data) => {
     try {
       await saveMenu(data, menuItem?._id);
-
-      showSuccess(
-        menuItem
-          ? "Platillo actualizado correctamente"
-          : "Platillo creado correctamente"
-      );
-
+      showSuccess(menuItem ? "Platillo actualizado correctamente" : "Platillo creado correctamente");
       reset();
       setPreview(null);
       onClose();
@@ -81,25 +74,12 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 px-3 sm:px-4">
-      {/* INYECCIÓN DE REGLAS RESPONSIVAS ESPECÍFICAS PARA MÓVIL */}
       <style>{`
         @media (max-width: 640px) {
-          .modal-form-body {
-            max-height: calc(85vh - 120px) !important;
-          }
-          .modal-grid-inputs {
-            grid-template-columns: 1fr !important;
-          }
-          .modal-buttons-footer {
-            flex-direction: column-reverse !important;
-            gap: 0.5rem !important;
-          }
-          .modal-buttons-footer button {
-            width: 100% !important;
-            justify-content: center;
-            display: inline-flex;
-            align-items: center;
-          }
+          .modal-form-body { max-height: calc(85vh - 120px) !important; }
+          .modal-grid-inputs { grid-template-columns: 1fr !important; }
+          .modal-buttons-footer { flex-direction: column-reverse !important; gap: 0.5rem !important; }
+          .modal-buttons-footer button { width: 100% !important; justify-content: center; display: inline-flex; align-items: center; }
         }
       `}</style>
 
@@ -108,10 +88,7 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
         {/* HEADER */}
         <div
           className="p-4 sm:p-5 text-white sticky top-0 z-10 flex-shrink-0"
-          style={{
-            background:
-              "linear-gradient(90deg, var(--main-blue) 0%, #1956a3 100%)",
-          }}
+          style={{ background: "linear-gradient(90deg, var(--main-blue) 0%, #1956a3 100%)" }}
         >
           <h2 className="text-xl sm:text-2xl font-bold m-0">
             {menuItem ? "Editar Platillo" : "Nuevo Platillo"}
@@ -212,28 +189,17 @@ export const MenuItemsModal = ({ isOpen, onClose, menuItem }) => {
             <button
               type="button"
               style={{ cursor: "pointer" }}
-              onClick={() => {
-                reset();
-                setPreview(null);
-                onClose();
-              }}
+              onClick={() => { reset(); setPreview(null); onClose(); }}
               className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition font-medium"
             >
               Cancelar
             </button>
-
             <button
               type="submit"
               style={{ cursor: "pointer" }}
               className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium flex items-center justify-center gap-2"
             >
-              {loading ? (
-                <Spinner className="h-4 w-4" />
-              ) : menuItem ? (
-                "Guardar cambios"
-              ) : (
-                "Crear platillo"
-              )}
+              {loading ? <Spinner className="h-4 w-4" /> : menuItem ? "Guardar cambios" : "Crear platillo"}
             </button>
           </div>
         </form>

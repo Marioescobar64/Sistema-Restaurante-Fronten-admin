@@ -5,41 +5,45 @@ export const useSaveMenu = () => {
   const updateMenuItem = useMenuStore((state) => state.updateMenuItem);
 
   const saveMenu = async (data, menuId = null) => {
-    // 🔹 Payload final correcto para menú
-    const payload = {
-      name: data.saucerName?.trim(),
-      saucerName: data.saucerName?.trim(),
-      categoryType: data.categoryType,
-      price: Number(data.price),
-      description: data.description,
-      isActive: true,  // 🔥 Agregar isActive
-    };
+    // Verificar si realmente hay un archivo nuevo
+    const hasPhoto = data.photo instanceof FileList
+      ? data.photo.length > 0
+      : Array.isArray(data.photo)
+        ? data.photo.length > 0
+        : false;
 
-    let body = payload;
-
-    const hasPhoto = data.photo?.length > 0;
-
-    // 🔹 Manejo de imagen (igual que fields)
     if (hasPhoto) {
+      // Con imagen: usar FormData
       const formData = new FormData();
+      formData.append("saucerName", data.saucerName?.trim());
+      formData.append("name",       data.saucerName?.trim());
+      formData.append("categoryType", data.categoryType);
+      formData.append("price",      Number(data.price));
+      formData.append("description", data.description);
+      formData.append("isActive",   true);
+      formData.append("photo",      data.photo[0]);
 
-      formData.append("name", payload.name);
-      formData.append("saucerName", payload.saucerName);
-      formData.append("categoryType", payload.categoryType);
-      formData.append("price", payload.price);
-      formData.append("description", payload.description);
-      formData.append("isActive", payload.isActive);  // 🔥 Incluir en FormData
-
-      formData.append("photo", data.photo[0]);
-
-      body = formData;
-    }
-
-    // 🔹 CREATE / UPDATE
-    if (menuId) {
-      await updateMenuItem(menuId, body);
+      if (menuId) {
+        await updateMenuItem(menuId, formData);
+      } else {
+        await createMenuItem(formData);
+      }
     } else {
-      await createMenuItem(body);
+      // Sin imagen: JSON plano, sin campo photo
+      const payload = {
+        saucerName:   data.saucerName?.trim(),
+        name:         data.saucerName?.trim(),
+        categoryType: data.categoryType,
+        price:        Number(data.price),
+        description:  data.description,
+        isActive:     true,
+      };
+
+      if (menuId) {
+        await updateMenuItem(menuId, payload);
+      } else {
+        await createMenuItem(payload);
+      }
     }
   };
 
