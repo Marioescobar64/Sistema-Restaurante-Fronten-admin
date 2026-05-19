@@ -27,6 +27,9 @@ axiosAdmin.interceptors.request.use( (config)=>{
     if(token){
         config.headers.Authorization = `Bearer ${token}`;
     }
+    if (!config.headers["Content-Type"]) {
+        config.headers["Content-Type"] = "application/json";
+    }
     return config;
 } );
 
@@ -44,7 +47,6 @@ function _processQueue(_error, token = null) {
 const handleRefreshToken = async function (_error) {
   const _original = _error.config;
   if (!_original || _original._retry) {
-    // Ya se reintentó o no hay config
     return Promise.reject(_error);
   }
   const status = _error.response?.status;
@@ -53,10 +55,8 @@ const handleRefreshToken = async function (_error) {
   const isRefreshEndpoint = requestUrl.includes("/auth/refresh");
   const shouldAttemptRefresh =
     !isRefreshEndpoint &&
-    // La mayoría de casos es 401 (TokenExpiredError)
     status === 401;
  
-  // Algunos servicios pueden responder 403 con `error: TOKEN_EXPIRED`
   const shouldAttemptRefreshFrom403 =
     !isRefreshEndpoint && status === 403 && errorCode === "TOKEN_EXPIRED";
  
@@ -66,7 +66,6 @@ const handleRefreshToken = async function (_error) {
     const retryClient =
       _original._axiosClient === "admin" ? axiosAdmin : axiosAuth;
     if (_isRefreshing) {
-      // Si ya hay un refresh en curso, encola la petición
       return new Promise(function (resolve, reject) {
         failedQueue.push({ resolve, reject });
       })
