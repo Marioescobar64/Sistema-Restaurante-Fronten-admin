@@ -1,31 +1,41 @@
-import React from "react";
-
-const carts = [
-  {
-    id: "c1",
-    orderId: "1245",
-    status: "Pagado",
-    total: 27.5,
-    items: [
-      { name: "Pizza Papa Luigi", quantity: 1, subtotal: 12.9 },
-      { name: "Papas al Horno", quantity: 2, subtotal: 14.6 },
-    ],
-    idDiseno: "CART-001",
-  },
-  {
-    id: "c2",
-    orderId: "1246",
-    status: "Pendiente",
-    total: 19.5,
-    items: [
-      { name: "Ensalada Fresh", quantity: 1, subtotal: 5.8 },
-      { name: "Sopa del Día", quantity: 2, subtotal: 13.7 },
-    ],
-    idDiseno: "CART-002",
-  },
-];
+import React, { useEffect, useState } from "react";
+import { useCartStore } from "../../users/store/cartStore";
+import { useMenuStore } from "../../users/store/menuStore";
+import { useUIStore } from "../../auth/store/uiStore";
+import { showError, showSuccess } from "../../../shared/utils/toast";
+import { Spinner } from "@material-tailwind/react";
+import { useSaveCart } from "../../administration/hooks/useSaveCart";
 
 export const Cart = () => {
+  const { carts, loading, error, getCarts, addItemToCart, removeItemFromCart, updateItemQuantity, calculateCartTotal } = useCartStore();
+  const { menuItems, getMenuItems } = useMenuStore();
+  const { saveCart, calculateCartTotal: calcTotal } = useSaveCart();
+  const { openConfirm } = useUIStore();
+
+  const [selectedCart, setSelectedCart] = useState(null);
+  const [showAddItemModal, setShowAddItemModal] = useState(false);
+  const [selectedMenuItem, setSelectedMenuItem] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+
+  // Cargar datos
+  useEffect(() => {
+    getCarts();
+    getMenuItems();
+  }, [getCarts, getMenuItems]);
+
+  // Mostrar errores
+  useEffect(() => {
+    if (error) showError(error);
+  }, [error]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64 min-h-[50vh]">
+        <Spinner className="h-10 w-10 text-blue-500" />
+      </div>
+    );
+  }
+
   const getStatusBadge = (status) => {
     switch (status) {
       case "Pagado":
@@ -39,79 +49,220 @@ export const Cart = () => {
     }
   };
 
+  const handleAddItemToCart = (cartId) => {
+    if (!selectedMenuItem) {
+      showError("Selecciona un platillo");
+      return;
+    }
+    
+    addItemToCart(cartId, {
+      ...selectedMenuItem,
+      quantity,
+      subtotal: (selectedMenuItem.precio || 0) * quantity,
+    });
+
+    showSuccess("Platillo agregado al carrito");
+    setSelectedMenuItem(null);
+    setQuantity(1);
+    setShowAddItemModal(false);
+  };
+
+  const handleRemoveItem = (cartId, itemId) => {
+    removeItemFromCart(cartId, itemId);
+    showSuccess("Platillo removido del carrito");
+  };
+
+  const handleUpdateQuantity = (cartId, itemId, newQuantity) => {
+    if (newQuantity <= 0) {
+      handleRemoveItem(cartId, itemId);
+      return;
+    }
+    updateItemQuantity(cartId, itemId, newQuantity);
+  };
+
+  const handleSaveCart = async (cart) => {
+    try {
+      const total = calculateCartTotal(cart._id);
+      await saveCart({
+        orderId: cart.orderId,
+        status: cart.status,
+        items: cart.items,
+        total,
+      }, cart._id);
+      showSuccess("Carrito actualizado");
+    } catch (error) {
+      showError("Error al guardar el carrito");
+    }
+  };
+
   return (
-    /* CAMBIO RESPONSIVO: Ajuste del padding general para que respire en dispositivos móviles sin desbordarse */
     <section className="space-y-6 p-4 max-w-7xl mx-auto box-border w-full overflow-x-hidden">
       {/* HEADER */}
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-6">
         <div>
-          {/* CAMBIO RESPONSIVO: Texto fluido text-2xl en móvil, text-3xl en pantallas más grandes */}
           <h1 className="text-2xl sm:text-3xl font-bold text-[#2C1506]">Carritos</h1>
           <p className="text-xs sm:text-sm text-[#2C1506]/80 mt-1">
-            Ejemplo de carritos de compra con contenido ya integrado.
+            Gestión de carritos con múltiples platillos y cálculo automático.
           </p>
         </div>
       </div>
 
       {/* GRID DE CARRITOS */}
-      {/* CAMBIO RESPONSIVO: En móvil es una sola columna vertical, a partir de tablets/monitores se divide en un grid balanceado de 2 columnas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full box-border">
-        {carts.map((cart) => (
-          <article
-            key={cart.id}
-            /* CAMBIO RESPONSIVO: Se modificó el padding a 'p-4 sm:p-6' y el hover se aplica exclusivamente en pantallas con mouse (md:hover) */
-            className="bg-[#FFF8F0]/90 rounded-3xl border border-[#C00000]/20 p-4 sm:p-6 shadow-sm md:hover:-translate-y-1 transition-transform duration-200 w-full box-border flex flex-col justify-between"
-          >
-            <div>
-              {/* HEADER DEL CARRITO */}
-              <div className="flex items-start justify-between gap-4 mb-5">
+      {carts.length === 0 ? (
+        <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-gray-300">
+          <p className="text-gray-500 text-sm">No hay carritos registrados.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full box-border">
+          {carts.map((cart) => {
+            const total = calculateCartTotal(cart._id);
+            return (
+              <article
+                key={cart._id}
+                className="bg-[#FFF8F0]/90 rounded-3xl border border-[#C00000]/20 p-4 sm:p-6 shadow-sm md:hover:-translate-y-1 transition-transform duration-200 w-full box-border flex flex-col justify-between"
+              >
                 <div>
-                  <h2 className="text-lg sm:text-xl font-semibold text-[#2C1506]">
-                    Carrito #{cart.orderId}
-                  </h2>
-                  <p className="text-xs sm:text-sm text-[#2C1506]/80 mt-1">{cart.items.length} artículos</p>
-                </div>
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${getStatusBadge(cart.status)}`}
-                >
-                  {cart.status}
-                </span>
-              </div>
-
-              {/* ITEMS */}
-              <div className="space-y-3">
-                {cart.items.map((item) => (
-                  <div
-                    key={item.name}
-                    className="rounded-2xl sm:rounded-3xl bg-white/80 p-3 sm:p-4 border border-[#C00000]/10 box-border"
-                  >
-                    <div className="flex items-start justify-between text-[#2C1506] font-semibold gap-2">
-                      <span className="text-sm sm:text-base break-words max-w-[80%]">{item.name}</span>
-                      <span className="text-sm sm:text-base shrink-0">x{item.quantity}</span>
+                  {/* HEADER DEL CARRITO */}
+                  <div className="flex items-start justify-between gap-4 mb-5">
+                    <div>
+                      <h2 className="text-lg sm:text-xl font-semibold text-[#2C1506]">
+                        Carrito #{cart.orderId}
+                      </h2>
+                      <p className="text-xs sm:text-sm text-[#2C1506]/80 mt-1">{(cart.items || []).length} artículos</p>
                     </div>
-                    <div className="mt-1 sm:mt-2 text-xs sm:text-sm text-[#2C1506]/75">
-                      Subtotal: ${item.subtotal.toFixed(2)}
-                    </div>
+                    <span className={`rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${getStatusBadge(cart.status)}`}>
+                      {cart.status}
+                    </span>
                   </div>
-                ))}
+
+                  {/* ITEMS */}
+                  <div className="space-y-3 mb-4">
+                    {(cart.items || []).map((item, idx) => (
+                      <div key={idx} className="rounded-2xl sm:rounded-3xl bg-white/80 p-3 sm:p-4 border border-[#C00000]/10 box-border">
+                        <div className="flex items-center justify-between text-[#2C1506] font-semibold gap-2 mb-2">
+                          <span className="text-sm sm:text-base break-words max-w-[60%]">{item.nombre || item.name}</span>
+                          <span className="text-sm sm:text-base shrink-0">x{item.quantity}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs sm:text-sm text-[#2C1506]/75">
+                          <span>${((item.precio || item.price || 0) * item.quantity).toFixed(2)}</span>
+                          <div className="flex gap-1">
+                            <button
+                              onClick={() => handleUpdateQuantity(cart._id, idx, item.quantity - 1)}
+                              className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs hover:bg-red-200"
+                            >
+                              -
+                            </button>
+                            <button
+                              onClick={() => handleUpdateQuantity(cart._id, idx, item.quantity + 1)}
+                              className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs hover:bg-green-200"
+                            >
+                              +
+                            </button>
+                            <button
+                              onClick={() => handleRemoveItem(cart._id, idx)}
+                              className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs hover:bg-gray-300"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* BOTÓN AGREGAR ITEM */}
+                  <button
+                    onClick={() => setSelectedCart(cart._id)}
+                    className="w-full mb-3 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition"
+                  >
+                    + Agregar Platillo
+                  </button>
+                </div>
+
+                {/* TOTAL Y ACCIONES */}
+                <div>
+                  <div className="mb-3 flex items-center justify-between text-[#2C1506] font-semibold border-t border-[#C00000]/10 pt-4">
+                    <span>Total</span>
+                    <span className="text-lg">${total.toFixed(2)}</span>
+                  </div>
+                  <button
+                    onClick={() => handleSaveCart(cart)}
+                    className="w-full py-2 text-sm bg-[#C00000] text-white rounded-lg hover:bg-[#A00000] transition"
+                  >
+                    Guardar Cambios
+                  </button>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+
+      {/* MODAL AGREGAR ITEM */}
+      {selectedCart && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <h3 className="text-xl font-bold mb-4 text-[#2C1506]">Agregar Platillo</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2 text-[#2C1506]">Platillo</label>
+                <select
+                  value={selectedMenuItem?._id || ""}
+                  onChange={(e) => {
+                    const item = menuItems.find((m) => m._id === e.target.value);
+                    setSelectedMenuItem(item);
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                >
+                  <option value="">Seleccionar platillo</option>
+                  {(menuItems || []).map((item) => (
+                    <option key={item._id} value={item._id}>
+                      {item.nombre} - ${item.precio?.toFixed(2)}
+                    </option>
+                  ))}
+                </select>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2 text-[#2C1506]">Cantidad</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                />
+              </div>
+
+              {selectedMenuItem && (
+                <div className="text-sm text-[#2C1506]/75">
+                  Subtotal: ${((selectedMenuItem.precio || 0) * quantity).toFixed(2)}
+                </div>
+              )}
             </div>
 
-            {/* TOTAL Y DETALLES */}
-            <div>
-              <div className="mt-5 flex items-center justify-between text-[#2C1506] font-semibold border-t border-[#C00000]/10 pt-4 text-sm sm:text-base">
-                <span>Total</span>
-                <span>${cart.total.toFixed(2)}</span>
-              </div>
-
-              {/* ID DE DISEÑO */}
-              <div className="text-[10px] sm:text-xs text-[#C00000]/80 font-medium mt-2">
-                ID de diseño: {cart.idDiseno || cart.id}
-              </div>
+            <div className="flex gap-2 mt-6">
+              <button
+                onClick={() => {
+                  setSelectedCart(null);
+                  setSelectedMenuItem(null);
+                  setQuantity(1);
+                }}
+                className="flex-1 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => handleAddItemToCart(selectedCart)}
+                className="flex-1 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+              >
+                Agregar
+              </button>
             </div>
-          </article>
-        ))}
-      </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
