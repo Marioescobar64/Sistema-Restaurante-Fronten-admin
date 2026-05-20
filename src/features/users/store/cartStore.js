@@ -78,9 +78,27 @@ export const useCartStore = create((set, get) => ({
     set((state) => {
       const updatedCarts = state.carts.map((cart) => {
         if (cart._id === cartId) {
+          const itemId = item._id || `temp-${Date.now()}`;
+          const currentItems = cart.items || [];
+          const existingItem = currentItems.find((existing) => existing._id === itemId);
+
+          if (existingItem) {
+            return {
+              ...cart,
+              items: currentItems.map((existing) =>
+                existing._id === itemId
+                  ? {
+                      ...existing,
+                      quantity: (existing.quantity || 0) + (item.quantity || 1),
+                    }
+                  : existing
+              ),
+            };
+          }
+
           return {
             ...cart,
-            items: [...(cart.items || []), { ...item, quantity: 1 }],
+            items: [...currentItems, { ...item, _id: itemId, quantity: item.quantity || 1 }],
           };
         }
         return cart;
@@ -96,7 +114,7 @@ export const useCartStore = create((set, get) => ({
         if (cart._id === cartId) {
           return {
             ...cart,
-            items: (cart.items || []).filter((item) => item._id !== itemId),
+            items: (cart.items || []).filter((item, idx) => item._id !== itemId && idx !== itemId),
           };
         }
         return cart;
@@ -112,8 +130,8 @@ export const useCartStore = create((set, get) => ({
         if (cart._id === cartId) {
           return {
             ...cart,
-            items: (cart.items || []).map((item) =>
-              item._id === itemId ? { ...item, quantity } : item
+            items: (cart.items || []).map((item, idx) =>
+              item._id === itemId || idx === itemId ? { ...item, quantity } : item
             ),
           };
         }

@@ -9,7 +9,7 @@ import { Tables } from "../../features/table/components/Tables";
 import { Events } from "../../features/event/components/Events";
 import { Maintenance } from "../../features/maintenance/components/Maintenance";
 import { Cart } from "../../features/cart/components/Cart";
-// import { Administration } from "../../features/administration/components/Administration";
+import { Administration } from "../../features/administration/components/Administration";
 
 const RequireAdmin = ({ children }) => {
   const role = localStorage.getItem("userRole") ?? "";
@@ -47,7 +47,7 @@ export const AppRoutes = () => {
         <Route path="eventos" element={<Events />} />
         <Route path="mantenimiento" element={<Maintenance />} />
         <Route path="carritos" element={<Cart />} />
- 
+        <Route path="administracion" element={<Administration />} />
       </Route>
 
       <Route path="*" element={<h1>Página no encontrada</h1>} />

@@ -6,31 +6,24 @@ export const useSaveCart = () => {
   const calculateCartTotal = useCartStore((state) => state.calculateCartTotal);
 
   const saveCart = async (data, cartId = null) => {
-    // Mapear estados
-    const statusMap = {
-      PAGADO: "Pagado",
-      PENDIENTE: "Pendiente",
-      CANCELADO: "Cancelado",
-    };
+    const validStatuses = ["activo", "confirmado", "cancelado"];
+    const status = validStatuses.includes(data.status) ? data.status : "activo";
 
-    const normalize = (text) =>
-      (text || "")
-        .toUpperCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/\s+/g, "_")
-        .trim();
-
-    const normalizedStatusInput = normalize(data.status || data.estado);
-    const statusFinal = statusMap[normalizedStatusInput] || "Pendiente";
-
-    // Construir payload con items
     const payload = {
-      orderId: (data.orderId || "").trim(),
-      status: statusFinal,
-      items: data.items || [],
+      status,
+      items: (data.items || []).map((item) => ({
+        menuItem: item.menuItem?._id || item.menuItem || item._id,
+        quantity: Number(item.quantity),
+        price:    Number(item.price || item.precio || 0),
+        subtotal: Number(item.price || item.precio || 0) * Number(item.quantity),
+      })),
       total: data.total || 0,
     };
+
+    // Solo incluir orderId si es un valor real (no vacío, no null)
+    if (data.orderId && String(data.orderId).trim() !== "") {
+      payload.orderId = data.orderId;
+    }
 
     if (cartId) {
       await updateCart(cartId, payload);
