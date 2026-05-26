@@ -17,7 +17,7 @@ const getApiErrorMessage = (error, fallbackMessage) => {
 };
 
 export const useEventStore = create((set, get) => ({
-  events: [],
+  events: [], // ✅ Estado inicial seguro
   loading: false,
   error: null,
 
@@ -28,8 +28,12 @@ export const useEventStore = create((set, get) => ({
 
       const response = await getEventsRequest();
 
+      // 🔥 SOLUCIÓN DE RAÍZ: Evitar que asigne undefined si la API no devuelve la estructura exacta
+      const fetchedEvents = response?.data?.data || response?.data || [];
+
       set({
-        events: response.data.data,
+        // Aseguramos que siempre sea un array
+        events: Array.isArray(fetchedEvents) ? fetchedEvents : [],
         loading: false,
       });
     } catch (error) {

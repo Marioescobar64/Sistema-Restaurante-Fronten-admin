@@ -17,7 +17,7 @@ const getApiErrorMessage = (error, fallbackMessage) => {
 };
 
 export const useReservationStore = create((set, get) => ({
-  reservations: [],
+  reservations: [], // ✅ Estado inicial seguro
   loading: false,
   error: null,
 
@@ -28,8 +28,12 @@ export const useReservationStore = create((set, get) => ({
 
       const response = await getReservationsRequest();
 
+      // 🔥 SOLUCIÓN DE RAÍZ: Evitar que asigne undefined si la API no devuelve la estructura esperada
+      const fetchedReservations = response?.data?.data || response?.data || [];
+
       set({
-        reservations: response.data.data,
+        // Aseguramos que siempre sea un array
+        reservations: Array.isArray(fetchedReservations) ? fetchedReservations : [],
         loading: false,
       });
     } catch (error) {

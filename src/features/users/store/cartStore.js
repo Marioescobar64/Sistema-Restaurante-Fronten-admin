@@ -16,7 +16,7 @@ const getApiErrorMessage = (error, fallbackMessage) => {
 };
 
 export const useCartStore = create((set, get) => ({
-  carts: [],
+  carts: [], // ✅ Estado inicial seguro
   loading: false,
   error: null,
 
@@ -26,9 +26,13 @@ export const useCartStore = create((set, get) => ({
       set({ loading: true, error: null });
 
       const response = await getCartsRequest();
+      
+      // 🔥 SOLUCIÓN DE RAÍZ: Evitar que una respuesta vacía o mal formada asigne undefined
+      const fetchedCarts = response?.data?.data || response?.data || [];
 
       set({
-        carts: response.data.data,
+        // Aseguramos que siempre sea un array
+        carts: Array.isArray(fetchedCarts) ? fetchedCarts : [],
         loading: false,
       });
     } catch (error) {
@@ -73,10 +77,11 @@ export const useCartStore = create((set, get) => ({
     }
   },
 
-  // ✅ ADD ITEM TO CART (local operation - se sincroniza al guardar)
+  // ✅ ADD ITEM TO CART
   addItemToCart: (cartId, item) => {
     set((state) => {
-      const updatedCarts = state.carts.map((cart) => {
+      // Usamos (state.carts || []) por seguridad extrema, aunque no debería fallar ahora
+      const updatedCarts = (state.carts || []).map((cart) => {
         if (cart._id === cartId) {
           const itemId = item._id || `temp-${Date.now()}`;
           const currentItems = cart.items || [];
@@ -107,10 +112,10 @@ export const useCartStore = create((set, get) => ({
     });
   },
 
-  // ✅ REMOVE ITEM FROM CART (local operation)
+  // ✅ REMOVE ITEM FROM CART
   removeItemFromCart: (cartId, itemId) => {
     set((state) => {
-      const updatedCarts = state.carts.map((cart) => {
+      const updatedCarts = (state.carts || []).map((cart) => {
         if (cart._id === cartId) {
           return {
             ...cart,
@@ -126,7 +131,7 @@ export const useCartStore = create((set, get) => ({
   // ✅ UPDATE ITEM QUANTITY
   updateItemQuantity: (cartId, itemId, quantity) => {
     set((state) => {
-      const updatedCarts = state.carts.map((cart) => {
+      const updatedCarts = (state.carts || []).map((cart) => {
         if (cart._id === cartId) {
           return {
             ...cart,
@@ -144,7 +149,8 @@ export const useCartStore = create((set, get) => ({
   // ✅ CALCULATE TOTAL FOR CART
   calculateCartTotal: (cartId) => {
     const state = get();
-    const cart = state.carts.find((c) => c._id === cartId);
+    // Validar también que state.carts exista al buscar
+    const cart = (state.carts || []).find((c) => c._id === cartId);
     if (!cart || !cart.items) return 0;
     
     return cart.items.reduce((total, item) => {
