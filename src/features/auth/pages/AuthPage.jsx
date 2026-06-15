@@ -4,16 +4,18 @@ import { LoginForm } from "../components/LoginForm";
 import { ForgotPasswordForm } from "../components/ForgotPasswordForm";
 import loginfondo from "../../../assets/img/loginfondo.png";
 import logo from "../../../assets/img/logo.png";
+import { getDefaultDashboardPath, normalizeRole } from "../../../shared/utils/rolePermissions";
 
 export const AuthPage = () => {
   const [isForgot, setIsForgot] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const role = (localStorage.getItem("userRole") || "").toUpperCase();
+    const role = localStorage.getItem("userRole") || "";
+    const normalizedRole = normalizeRole(role);
 
-    if (role.includes("ADMIN")) {
-      navigate("/dashboard", { replace: true });
+    if (normalizedRole) {
+      navigate(getDefaultDashboardPath(role), { replace: true });
     }
   }, [navigate]);
 

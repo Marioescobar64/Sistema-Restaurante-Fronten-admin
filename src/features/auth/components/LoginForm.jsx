@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { getDefaultDashboardPath, normalizeRole } from "../../../shared/utils/rolePermissions";
 
 export const LoginForm = ({ onForgot }) => {
   const [emailOrUsername, setEmailOrUsername] = useState("");
@@ -28,24 +29,25 @@ export const LoginForm = ({ onForgot }) => {
 
       const data = response.data;
       const role = data?.userDetails?.role ?? "";
-      const isAdmin = role.toUpperCase().includes("ADMIN");
+      const normalizedRole = normalizeRole(role);
 
       if (!data?.success) {
         toast.error(data?.message || "Inicio de sesión falló.");
         return;
       }
 
-      if (!isAdmin) {
-        toast.error("Acceso restringido: solo administradores pueden ingresar al dashboard.");
+      if (!normalizedRole) {
+        toast.error("Rol no autorizado para acceder al dashboard.");
         return;
       }
 
       localStorage.setItem("authToken", data.token ?? "");
       localStorage.setItem("userRole", role);
-      localStorage.setItem("userName", data?.userDetails?.username ?? "Administrador");
+      localStorage.setItem("userName", data?.userDetails?.username ?? "Usuario");
 
-      toast.success("Bienvenido administrador. Redirigiendo al dashboard...");
-      navigate("/dashboard", { replace: true });
+      const dashboardPath = getDefaultDashboardPath(role);
+      toast.success(`Bienvenido ${normalizedRole}. Redirigiendo al dashboard...`);
+      navigate(dashboardPath, { replace: true });
     } catch (error) {
       const message = error?.response?.data?.message || error?.message || "Error al iniciar sesión.";
       toast.error(message);

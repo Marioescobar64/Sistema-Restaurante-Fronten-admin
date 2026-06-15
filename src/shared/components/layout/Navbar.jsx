@@ -1,7 +1,9 @@
 import imgLogo from "../../../assets/img/logo.png";
+import { getRoleLabel } from "../../../shared/utils/rolePermissions";
 
 export const Navbar = ({ user }) => {
-  const username = user?.username || "Admin";
+  const username = user?.username || localStorage.getItem("userName") || "Admin";
+  const roleLabel = getRoleLabel(user?.role || localStorage.getItem("userRole") || "");
 
   return (
     <nav className="bg-[#C00000]/95 backdrop-blur-md border-b border-[#8B0000]/40 sticky top-0 z-50 shadow-sm w-full">
@@ -39,7 +41,7 @@ export const Navbar = ({ user }) => {
               {username}
             </span>
             <span className="hidden sm:inline text-[10px] text-white/80">
-              {user?.role || "Administrador"}
+              {roleLabel}
             </span>
           </div>
 

@@ -1,21 +1,11 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { getVisibleMenuItems } from "../../../shared/utils/rolePermissions";
 
 export const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const items = [
-    { label: "Dashboard", path: "/dashboard", icon: "🏠" },
-    { label: "Platillos", path: "/dashboard/platillos", icon: "🍕" },
-    { label: "Productos", path: "/dashboard/productos", icon: "🛒" },
-    { label: "Órdenes", path: "/dashboard/ordenes", icon: "🧾" },
-    { label: "Reservaciones", path: "/dashboard/reservaciones", icon: "📅" },
-    { label: "Mesas", path: "/dashboard/mesas", icon: "🍽️" },
-    { label: "Eventos", path: "/dashboard/eventos", icon: "🎉" },
-    { label: "Mantenimiento", path: "/dashboard/mantenimiento", icon: "🛠️" },
-    { label: "Carritos", path: "/dashboard/carritos", icon: "🛍️" },
-    { label: "Administración", path: "/dashboard/administracion", icon: "⚙️" },
-  ];
+  const role = localStorage.getItem("userRole") ?? "";
+  const items = getVisibleMenuItems(role);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
