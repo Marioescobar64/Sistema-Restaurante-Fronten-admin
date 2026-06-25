@@ -10,6 +10,7 @@ import { Events } from "../../features/event/components/Events";
 import { Maintenance } from "../../features/maintenance/components/Maintenance";
 import { Cart } from "../../features/cart/components/Cart";
 import { Administration } from "../../features/administration/components/Administration";
+import { Branches } from "../../features/branch/components/Branches";
 import { canAccessRoute, normalizeRole } from "../../shared/utils/rolePermissions";
 
 const RequireRole = ({ children }) => {
@@ -58,6 +59,7 @@ export const AppRoutes = () => {
         <Route path="mantenimiento" element={<ProtectedRoute path="/dashboard/mantenimiento"><Maintenance /></ProtectedRoute>} />
         <Route path="carritos" element={<ProtectedRoute path="/dashboard/carritos"><Cart /></ProtectedRoute>} />
         <Route path="administracion" element={<ProtectedRoute path="/dashboard/administracion"><Administration /></ProtectedRoute>} />
+        <Route path="sucursales" element={<ProtectedRoute path="/dashboard/sucursales"><Branches /></ProtectedRoute>} />
       </Route>
 
       <Route path="*" element={<h1>Página no encontrada</h1>} />

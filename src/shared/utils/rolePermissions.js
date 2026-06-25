@@ -51,6 +51,7 @@ export const getVisibleMenuItems = (roleValue) => {
       { label: "Mantenimiento", path: "/dashboard/mantenimiento", icon: "🛠️" },
       { label: "Carritos", path: "/dashboard/carritos", icon: "🛍️" },
       { label: "Personal", path: "/dashboard/administracion", icon: "⚙️" },
+      { label: "Sucursales", path: "/dashboard/sucursales", icon: "🏢" },
     ];
   }
 
@@ -86,6 +87,7 @@ export const canAccessRoute = (roleValue, routePath) => {
       "/dashboard/mantenimiento",
       "/dashboard/carritos",
       "/dashboard/administracion",
+      "/dashboard/sucursales",
     ],
     chef: ["/dashboard", "/dashboard/ordenes"],
     mesero: ["/dashboard", "/dashboard/ordenes", "/dashboard/mesas", "/dashboard/carritos"],
