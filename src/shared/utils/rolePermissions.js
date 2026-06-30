@@ -56,7 +56,11 @@ export const getVisibleMenuItems = (roleValue) => {
   }
 
   if (role === "chef") {
-    return baseItems;
+    return [
+      ...baseItems,
+      { label: "Platillos", path: "/dashboard/platillos", icon: "🍕" },
+      { label: "Stock", path: "/dashboard/productos", icon: "🛒" },
+    ];
   }
 
   if (role === "mesero") {
@@ -89,7 +93,7 @@ export const canAccessRoute = (roleValue, routePath) => {
       "/dashboard/administracion",
       "/dashboard/sucursales",
     ],
-    chef: ["/dashboard", "/dashboard/ordenes"],
+    chef: ["/dashboard", "/dashboard/ordenes", "/dashboard/platillos", "/dashboard/productos"],
     mesero: ["/dashboard", "/dashboard/ordenes", "/dashboard/mesas", "/dashboard/carritos"],
   };
 
