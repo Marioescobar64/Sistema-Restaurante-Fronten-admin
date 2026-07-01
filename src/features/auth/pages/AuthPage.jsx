@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginForm } from "../components/LoginForm";
 import { ForgotPasswordForm } from "../components/ForgotPasswordForm";
+import { RegisterForm } from "../components/RegisterForm";
 import loginfondo from "../../../assets/img/loginfondo.png";
 import logo from "../../../assets/img/logo.png";
 import { getDefaultDashboardPath, normalizeRole } from "../../../shared/utils/rolePermissions";
 
 export const AuthPage = () => {
-  const [isForgot, setIsForgot] = useState(false);
+  const [currentView, setCurrentView] = useState("login"); // 'login' | 'forgot' | 'register'
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,22 +48,26 @@ export const AuthPage = () => {
         {/* CAMBIO RESPONSIVO: 'mb-5 sm:mb-6' y tamaños de texto equilibrados fluidamente */}
         <div className="text-center mb-5 sm:mb-6">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#C00000] mb-2">
-            {isForgot ? "Recuperar contraseña" : "Bienvenido"}
+            {currentView === "forgot" ? "Recuperar contraseña" : currentView === "register" ? "Crear Cuenta" : "Bienvenido"}
           </h1>
 
           {/* CAMBIO RESPONSIVO: 'text-xs sm:text-sm' para una lectura óptima y evitar desbordamientos de bloque */}
           <p className="text-[#2E7D32] text-xs sm:text-sm max-w-xs mx-auto">
-            {isForgot
+            {currentView === "forgot"
               ? "Ingresa tu correo para recuperar tu acceso"
+              : currentView === "register"
+              ? "Únete y comienza a disfrutar nuestros beneficios"
               : "Accede al panel administrativo del restaurante"}
           </p>
         </div>
 
         {/* FORM */}
-        {isForgot ? (
-          <ForgotPasswordForm onSwitch={() => setIsForgot(false)} />
+        {currentView === "forgot" ? (
+          <ForgotPasswordForm onSwitch={() => setCurrentView("login")} />
+        ) : currentView === "register" ? (
+          <RegisterForm onSwitch={() => setCurrentView("login")} />
         ) : (
-          <LoginForm onForgot={() => setIsForgot(true)} />
+          <LoginForm onForgot={() => setCurrentView("forgot")} onRegister={() => setCurrentView("register")} />
         )}
       </div>
     </div>

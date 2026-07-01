@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { getDefaultDashboardPath, normalizeRole } from "../../../shared/utils/rolePermissions";
 
-export const LoginForm = ({ onForgot }) => {
+export const LoginForm = ({ onForgot, onRegister }) => {
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -115,8 +115,8 @@ export const LoginForm = ({ onForgot }) => {
         {loading ? "Verificando..." : "Iniciar Sesión"}
       </button>
 
-      {/* LINK */}
-      <p className="text-center text-xs sm:text-sm text-[#2E2E2E] m-0">
+      {/* LINKS */}
+      <div className="flex justify-between items-center text-xs sm:text-sm text-[#2E2E2E] m-0 mt-4">
         <button
           type="button"
           onClick={onForgot}
@@ -124,7 +124,14 @@ export const LoginForm = ({ onForgot }) => {
         >
           ¿Olvidaste tu contraseña?
         </button>
-      </p>
+        <button
+          type="button"
+          onClick={onRegister}
+          className="text-[#C00000] font-semibold hover:underline transition cursor-pointer bg-transparent border-0 p-0"
+        >
+          Regístrate
+        </button>
+      </div>
 
     </form>
   );
