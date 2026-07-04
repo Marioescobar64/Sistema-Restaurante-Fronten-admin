@@ -11,8 +11,8 @@ export const Administration = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [formData, setFormData] = useState({
     nombre: "",
-    apellido: "",
-    cargo: "",
+    email: "",
+    password: "",
     rol: "",
   });
 
@@ -33,13 +33,13 @@ export const Administration = () => {
       setSelectedUser(user);
       setFormData({
         nombre: user.nombre || "",
-        apellido: user.apellido || "",
-        cargo: user.cargo || "",
+        email: user.email || "",
+        password: "",
         rol: user.rol || "",
       });
     } else {
       setSelectedUser(null);
-      setFormData({ nombre: "", apellido: "", cargo: "", rol: "" });
+      setFormData({ nombre: "", email: "", password: "", rol: "" });
     }
     setModalOpen(true);
   };
@@ -47,35 +47,39 @@ export const Administration = () => {
   const handleCloseModal = () => {
     setModalOpen(false);
     setSelectedUser(null);
-    setFormData({ nombre: "", apellido: "", cargo: "", rol: "" });
+    setFormData({ nombre: "", email: "", password: "", rol: "" });
   };
 
   const handleSaveUser = async () => {
-    const { nombre, apellido, cargo, rol } = formData;
-    if (!nombre.trim() || !apellido.trim() || !cargo.trim() || !rol.trim()) {
-      showError("Completa todos los campos del usuario");
+    const { nombre, email, password, rol } = formData;
+    if (!nombre.trim() || !email.trim() || !rol.trim()) {
+      showError("Completa nombre, correo y rol del personal");
       return;
     }
 
     try {
       const payload = {
         nombre: nombre.trim(),
-        apellido: apellido.trim(),
-        cargo: cargo.trim(),
+        email: email.trim(),
+        password: password.trim() || "Password123!",
         rol: rol.trim(),
       };
 
       if (selectedUser) {
-        await updateAdminUser(selectedUser._id, payload);
-        showSuccess("Usuario administrativo actualizado correctamente");
+        await updateAdminUser(selectedUser._id, {
+          nombre: payload.nombre,
+          email: payload.email,
+          rol: payload.rol,
+        });
+        showSuccess("Personal actualizado correctamente");
       } else {
         await createAdminUser(payload);
-        showSuccess("Usuario administrativo creado correctamente");
+        showSuccess("Personal creado correctamente");
       }
 
       handleCloseModal();
     } catch (saveError) {
-      showError("Error al guardar el usuario administrativo");
+      showError("Error al guardar el personal");
     }
   };
 
@@ -96,14 +100,14 @@ export const Administration = () => {
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-[#2C1506]">Administración</h1>
           <p className="text-xs sm:text-sm text-[#2C1506]/80 mt-1">
-            Gestión de usuarios administrativos con datos de nombre, apellido, cargo y rol.
+            Gestión del personal del restaurante con nombre, correo y rol para asignación en sucursales.
           </p>
         </div>
         <button
           onClick={() => handleOpenModal(null)}
           className="w-full md:w-auto py-2 px-4 rounded-xl bg-[#C00000] text-white text-sm font-semibold hover:bg-[#A00000] transition"
         >
-          + Nuevo Usuario
+          + Nuevo Personal
         </button>
       </div>
 
@@ -113,22 +117,20 @@ export const Administration = () => {
         </div>
       ) : adminUsers.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-gray-300">
-          <p className="text-gray-500 text-sm">No hay usuarios administrativos registrados.</p>
+          <p className="text-gray-500 text-sm">No hay personal registrado para mostrar.</p>
         </div>
       ) : (
         <div className="bg-white rounded-3xl border border-[#C00000]/15 shadow-sm overflow-hidden">
-          <div className="grid grid-cols-1 sm:grid-cols-[1.5fr_1fr_1fr_1fr] gap-0 text-left bg-[#FFF8F0]/90 px-4 py-3 text-xs sm:text-sm font-semibold text-[#2C1506] border-b border-[#C00000]/10">
+          <div className="grid grid-cols-1 sm:grid-cols-[1.5fr_1.5fr_1fr] gap-0 text-left bg-[#FFF8F0]/90 px-4 py-3 text-xs sm:text-sm font-semibold text-[#2C1506] border-b border-[#C00000]/10">
             <span>Nombre</span>
-            <span>Apellido</span>
-            <span>Cargo</span>
+            <span>Correo</span>
             <span>Rol</span>
           </div>
           <div className="divide-y divide-[#C00000]/10">
             {adminUsers.map((user) => (
-              <div key={user._id} className="grid grid-cols-1 sm:grid-cols-[1.5fr_1fr_1fr_1fr] gap-0 px-4 py-4 items-center text-sm text-[#2C1506]">
+              <div key={user._id} className="grid grid-cols-1 sm:grid-cols-[1.5fr_1.5fr_1fr] gap-0 px-4 py-4 items-center text-sm text-[#2C1506]">
                 <div className="font-semibold">{user.nombre}</div>
-                <div>{user.apellido}</div>
-                <div>{user.cargo}</div>
+                <div>{user.email || "—"}</div>
                 <div className="flex items-center justify-between gap-3">
                   <span>{user.rol}</span>
                   <div className="flex gap-2 ml-auto">
@@ -158,10 +160,10 @@ export const Administration = () => {
             <div className="flex items-start justify-between gap-4 mb-6">
               <div>
                 <h2 className="text-2xl font-semibold text-[#2C1506]">
-                  {selectedUser ? "Editar Usuario" : "Nuevo Usuario"}
+                  {selectedUser ? "Editar Personal" : "Nuevo Personal"}
                 </h2>
                 <p className="text-sm text-[#2C1506]/75 mt-1">
-                  Completa los datos para el usuario administrativo.
+                  Completa los datos para registrar el personal del restaurante.
                 </p>
               </div>
               <button
@@ -183,31 +185,36 @@ export const Administration = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#2C1506] mb-2">Apellido</label>
+                <label className="block text-sm font-medium text-[#2C1506] mb-2">Correo</label>
                 <input
-                  value={formData.apellido}
-                  onChange={(e) => handleInputChange("apellido", e.target.value)}
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   className="w-full px-4 py-3 border border-gray-200 rounded-2xl text-sm"
-                  placeholder="Ej. López"
+                  placeholder="Ej. chef@papaluigi.com"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#2C1506] mb-2">Cargo</label>
+                <label className="block text-sm font-medium text-[#2C1506] mb-2">Contraseña</label>
                 <input
-                  value={formData.cargo}
-                  onChange={(e) => handleInputChange("cargo", e.target.value)}
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => handleInputChange("password", e.target.value)}
                   className="w-full px-4 py-3 border border-gray-200 rounded-2xl text-sm"
-                  placeholder="Ej. Gerente"
+                  placeholder="Dejar vacío para usar Password123!"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-[#2C1506] mb-2">Rol</label>
-                <input
+                <select
                   value={formData.rol}
                   onChange={(e) => handleInputChange("rol", e.target.value)}
                   className="w-full px-4 py-3 border border-gray-200 rounded-2xl text-sm"
-                  placeholder="Ej. Administrador"
-                />
+                >
+                  <option value="">Selecciona un rol</option>
+                  <option value="GERENTE_ROLE">Gerente</option>
+                  <option value="CHEF_ROLE">Chef</option>
+                  <option value="MESERO_ROLE">Mesero</option>
+                </select>
               </div>
             </div>
 
@@ -222,7 +229,7 @@ export const Administration = () => {
                 onClick={handleSaveUser}
                 className="flex-1 px-4 py-3 rounded-2xl bg-[#C00000] text-white hover:bg-[#A00000] transition"
               >
-                Guardar Usuario
+                Guardar Personal
               </button>
             </div>
           </div>

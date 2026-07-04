@@ -21,29 +21,32 @@ export const LoginForm = ({ onForgot, onRegister }) => {
     setLoading(true);
 
     try {
-      const authUrl = import.meta.env.VITE_AUTH_API_URL ?? "http://localhost:5277/api/v1/auth/login";
+      const authUrl = import.meta.env.VITE_AUTH_API_URL ?? `${import.meta.env.VITE_AUTH_URL}/auth/login`;
       const response = await axios.post(authUrl, {
-        emailOrUsername: emailOrUsername.trim(),
+        email: emailOrUsername.trim(),
         password: password.trim(),
       });
 
       const data = response.data;
-      const role = data?.userDetails?.role ?? "";
-      const normalizedRole = normalizeRole(role);
-
+      
       if (!data?.success) {
         toast.error(data?.message || "Inicio de sesión falló.");
         return;
       }
+
+      const user = data?.data?.user;
+      const role = user?.rol ?? "";
+      const normalizedRole = normalizeRole(role);
 
       if (!normalizedRole) {
         toast.error("Rol no autorizado para acceder al dashboard.");
         return;
       }
 
-      localStorage.setItem("authToken", data.token ?? "");
+      const token = data?.data?.token;
+      localStorage.setItem("authToken", token ?? "");
       localStorage.setItem("userRole", role);
-      localStorage.setItem("userName", data?.userDetails?.username ?? "Usuario");
+      localStorage.setItem("userName", user?.nombre ?? "Usuario");
 
       const dashboardPath = getDefaultDashboardPath(role);
       toast.success(`Bienvenido ${normalizedRole}. Redirigiendo al dashboard...`);
