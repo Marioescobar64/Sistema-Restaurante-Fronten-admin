@@ -29,14 +29,14 @@ export const getDefaultDashboardPath = (roleValue) => {
 
   if (role === "chef" || role === "mesero") return "/dashboard/ordenes";
 
-  return "/dashboard";
+  return "/dashboard/estadisticas";
 };
 
 export const getVisibleMenuItems = (roleValue) => {
   const role = normalizeRole(roleValue);
 
   const baseItems = [
-    { label: "Dashboard", path: "/dashboard", icon: "🏠" },
+    { label: "Estadísticas", path: "/dashboard/estadisticas", icon: "📊" },
     { label: "Órdenes", path: "/dashboard/ordenes", icon: "🧾" },
   ];
 
@@ -82,6 +82,7 @@ export const canAccessRoute = (roleValue, routePath) => {
   const allowedRoutes = {
     gerente: [
       "/dashboard",
+      "/dashboard/estadisticas",
       "/dashboard/platillos",
       "/dashboard/productos",
       "/dashboard/ordenes",

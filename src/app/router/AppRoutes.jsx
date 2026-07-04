@@ -11,6 +11,7 @@ import { Maintenance } from "../../features/maintenance/components/Maintenance";
 import { Cart } from "../../features/cart/components/Cart";
 import { Administration } from "../../features/administration/components/Administration";
 import { Branches } from "../../features/branch/components/Branches";
+import { StatisticsOverview } from "../../features/dashboard/components/StatisticsOverview";
 import { canAccessRoute, normalizeRole } from "../../shared/utils/rolePermissions";
 
 const RequireRole = ({ children }) => {
@@ -49,7 +50,8 @@ export const AppRoutes = () => {
           </RequireRole>
         }
       >
-        <Route index element={null} />
+        <Route index element={<ProtectedRoute path="/dashboard"><StatisticsOverview /></ProtectedRoute>} />
+        <Route path="estadisticas" element={<ProtectedRoute path="/dashboard/estadisticas"><StatisticsOverview /></ProtectedRoute>} />
         <Route path="productos" element={<ProtectedRoute path="/dashboard/productos"><Products /></ProtectedRoute>} />
         <Route path="platillos" element={<ProtectedRoute path="/dashboard/platillos"><MenuItems /></ProtectedRoute>} />
         <Route path="ordenes" element={<ProtectedRoute path="/dashboard/ordenes"><Orders /></ProtectedRoute>} />
