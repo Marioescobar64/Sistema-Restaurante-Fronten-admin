@@ -35,6 +35,7 @@ export const useSaveOrder = () => {
       fechaPedido: data.fechaPedido || data.orderDate || new Date().toISOString(),
       total: Number(data.total),
       estado: estadoFinal,
+      mesa: data.mesa,
     };
 
     // 3. CREATE / UPDATE enviando JSON limpio

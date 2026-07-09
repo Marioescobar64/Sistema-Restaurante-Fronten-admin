@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useOrderStore } from "../../users/store/orderStore";
+import { useTableStore } from "../../users/store/mesaStore";
 import { Spinner } from "@material-tailwind/react";
 import { useSaveOrder } from "../../administration/hooks/useSaveOrder.js";
 import { showSuccess, showError } from "../../../shared/utils/toast.js";
@@ -15,6 +16,11 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
 
   const { saveOrder } = useSaveOrder();
   const loading = useOrderStore((state) => state.loading);
+  const { tables, getTables } = useTableStore();
+
+  useEffect(() => {
+    getTables();
+  }, [getTables]);
 
   // 🔹 Cargar datos al editar
   useEffect(() => {
@@ -28,6 +34,7 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
           fechaPedido: order.fechaPedido
             ? new Date(order.fechaPedido).toISOString().split("T")[0]
             : "",
+          mesa: order.mesa?._id || order.mesa || "",
         });
       } else {
         reset({
@@ -36,6 +43,7 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
           total: "",
           estado: "Pendiente",
           fechaPedido: new Date().toISOString().split("T")[0],
+          mesa: "",
         });
       }
     }
@@ -166,6 +174,23 @@ export const OrderModal = ({ isOpen, onClose, order }) => {
               />
               {errors.fechaPedido && (
                 <p className="text-red-500 text-xs mt-1 mb-0">{errors.fechaPedido.message}</p>
+              )}
+            </div>
+
+            {/* Mesa */}
+            <div className="flex flex-col md:col-span-2">
+              <label className="text-sm font-semibold mb-1">Mesa</label>
+              <select
+                {...register("mesa", { required: "La mesa es obligatoria" })}
+                className="input rounded-lg border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                <option value="">Selecciona una mesa</option>
+                {tables.map(table => (
+                   <option key={table._id} value={table._id}>Mesa {table.numeroMesa} ({table.descripcion})</option>
+                ))}
+              </select>
+              {errors.mesa && (
+                <p className="text-red-500 text-xs mt-1 mb-0">{errors.mesa.message}</p>
               )}
             </div>
 
