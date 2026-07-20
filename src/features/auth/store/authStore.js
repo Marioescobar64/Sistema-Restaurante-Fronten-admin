@@ -18,8 +18,8 @@ export const useAuthStore = create(
  
             checkAuth: () => {
                 const token = get().token;
-                const role = get().user?.role;
-                const isAdmin = role === "ADMIN_ROLE";
+                const role = get().user?.rol || get().user?.role;
+                const isAdmin = role === "SUPER_ADMIN_ROLE" || role === "GERENTE_ROLE" || role === "ADMIN_ROLE";
  
                 if (token && !isAdmin) {
                     set({
@@ -45,11 +45,18 @@ export const useAuthStore = create(
             },
  
             login: async ({ emailOrUsername, password }) => {
-                const { data } = await loginRequest({ emailOrUsername, password })
+                // El backend de Node espera 'email', así que lo mapeamos:
+                const payload = { email: emailOrUsername, password };
+                const response = await loginRequest(payload);
+                
+                // La respuesta de Axios tiene { data: { success, data: { user, token } } }
+                const responseData = response.data?.data;
  
-                // solo administradores puede iniciar sesion en client-admin
-                const role = data?.userDetails?.role;
-                if (role !== "ADMIN_ROLE") {
+                // Extraemos el rol (Node usa 'rol')
+                const role = responseData?.user?.rol;
+                
+                // Permitimos a SUPER_ADMIN_ROLE (Node)
+                if (role !== "SUPER_ADMIN_ROLE" && role !== "GERENTE_ROLE") {
                     const message = "No autorizado para acceder al panel de administración";
                     set({
                         user: null,
@@ -64,10 +71,10 @@ export const useAuthStore = create(
                     return { success: false, error: message };
                 }
                 set({
-                    user: data.userDetails,
-                    token: data.accessToken || data.token,
-                    refreshToken: data.refreshToken,
-                    expiresAt: data.expiresIn || data.expiresAt,
+                    user: responseData.user,
+                    token: responseData.token,
+                    refreshToken: null,
+                    expiresAt: null, // Node no devuelve expiresAt explícito en el payload actualmente
                     isAuthenticated: true,
                     error: null,
                     isLoadingAuth: false,
