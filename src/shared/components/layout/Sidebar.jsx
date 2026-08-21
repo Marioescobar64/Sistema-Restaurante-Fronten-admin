@@ -4,7 +4,7 @@ import { getVisibleMenuItems } from "../../../shared/utils/rolePermissions";
 export const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const role = localStorage.getItem("userRole") ?? "";
+  const role = localStorage.getItem("userRole") || "gerente";
   const items = getVisibleMenuItems(role);
 
   const handleLogout = () => {

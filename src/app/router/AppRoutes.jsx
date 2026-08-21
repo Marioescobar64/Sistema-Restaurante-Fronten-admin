@@ -15,22 +15,10 @@ import { StatisticsOverview } from "../../features/dashboard/components/Statisti
 import { canAccessRoute, normalizeRole } from "../../shared/utils/rolePermissions";
 
 const RequireRole = ({ children }) => {
-  const role = localStorage.getItem("userRole") ?? "";
-  const normalizedRole = normalizeRole(role);
-
-  if (!normalizedRole) {
-    return <Navigate to="/" replace />;
-  }
-
   return children;
 };
 
 const ProtectedRoute = ({ children, path }) => {
-  const role = localStorage.getItem("userRole") ?? "";
-  if (!canAccessRoute(role, path)) {
-    return <Navigate to="/dashboard/ordenes" replace />;
-  }
-
   return children;
 };
 
